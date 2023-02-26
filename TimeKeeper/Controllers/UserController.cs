@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TimeKeeper.Models;
+using TimeKeeper.Models.DTO;
 using TimeKeeper.Services;
 
 namespace TimeKeeper.Controllers;

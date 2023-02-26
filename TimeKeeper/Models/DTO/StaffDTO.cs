@@ -1,4 +1,4 @@
-namespace TimeKeeper.Models;
+namespace TimeKeeper.Models.DTO;
 
 public class StaffDTO
 {

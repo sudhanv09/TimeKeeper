@@ -1,34 +1,45 @@
-using Microsoft.EntityFrameworkCore;
 using TimeKeeper.Data;
 using TimeKeeper.Models;
+using TimeKeeper.Models.DTO;
 
 namespace TimeKeeper.Services;
 
 public class InfoService : IInfoService
 {
-    public AppDbContext _ctx { get; set; }
+    private AppDbContext _ctx { get; set; }
 
     public InfoService(AppDbContext ctx)
     {
         _ctx = ctx;
     }
     
-    public void CheckIn(Timing timing)
+    public void CheckIn(CheckInDTO inDto)
     {
-        var checkIn = new Timing();
-        checkIn.CheckIn = DateTime.Now;
-        checkIn.isWorking = true;
+        var checkIn = new Timing
+        {
+            CheckIn = inDto.CheckInTime,
+            IsWorking = true
+        };
         _ctx.Timings.Add(checkIn);
+        SaveChanges();
     }
 
-    public void CheckOut(Timing timing)
+    public void CheckOut(CheckOutDTO outDto)
     {
-        var checkOut = new Timing();
-        checkOut.CheckOut = DateTime.Now;
-        checkOut.isWorking = false;
+        var checkOut = new Timing
+        {
+            CheckOut = outDto.CheckOutTime,
+            IsWorking = false
+        };
         _ctx.Timings.Add(checkOut);
+        SaveChanges();
     }
 
+    /* Calculate everyday hours
+     Add TodaysHours to DB
+     returns TimeSpan hours
+     */
+    
     public TimeSpan CalculateHours(string id)
     {
         var item = _ctx.Timings.Where(t => t.Id == id)
@@ -38,13 +49,42 @@ public class InfoService : IInfoService
                 checkouttime = x.CheckOut
             })
             .FirstOrDefault();
-        return item.checkouttime - item.checkintime;
+        var hours = item.checkouttime - item.checkintime;
+        _ctx.Timings.Add(new Timing() { TodaysHours = hours.TotalHours });
+        return hours;
     }
 
-    public double CalculateSalary(string id)
+    /* Calculate overall hours worked
+     Add TotalHoursWorked to DB
+     */
+    public void TotalHours(string id)
+    {
+        var item = _ctx.Timings.Where(t => t.Id == id)
+            .Sum(x => x.TodaysHours);
+
+        _ctx.Timings.Add(new Timing() { TotalHoursWorked = item });
+    }
+
+    /* Calculates everyday earnings
+     Add TotalSalary to DB
+     */
+    public void CalculateEverydayEarnings(string id)
     {
         var hours = CalculateHours(id);
-        return hours.TotalHours * 178;
+        var earnings = hours.TotalHours * 178;
+
+        _ctx.Timings.Add(new Timing() { TodaysEarnings = (int)earnings });
+    }
+    
+    /* Calculate Overall Earnings
+     Add TotalSalary to DB
+     */
+    public void TotalEarnings(string id)
+    {
+        var item = _ctx.Timings.Where(t => t.Id == id)
+            .Sum(x => x.TodaysEarnings);
+
+        _ctx.Timings.Add(new Timing() { TotalSalary = item });
     }
 
     public List<DayOfWeek> GetSchedule(string id)
@@ -58,8 +98,8 @@ public class InfoService : IInfoService
             .FirstOrDefault();
         return item.schedule;
     }
-
-    public int GetSalary(string id)
+    
+    public int GetTotalSalary(string id)
     {
         var item = _ctx.Timings.Where(t => t.Id == id)
             .Select(x => new
@@ -75,7 +115,7 @@ public class InfoService : IInfoService
         var item = _ctx.Timings.Where(t => t.Id == id)
             .Select(x => new
             {
-                hours = x.HoursWorked
+                hours = x.TotalHoursWorked
             })
             .FirstOrDefault();
         return item.hours;

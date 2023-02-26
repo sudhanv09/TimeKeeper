@@ -236,20 +236,70 @@ namespace TimeKeeper.Migrations
                     b.Property<DateTime>("CheckOut")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<double>("HoursWorked")
-                        .HasColumnType("double precision");
+                    b.Property<bool>("IsWorking")
+                        .HasColumnType("boolean");
 
                     b.Property<int[]>("Schedule")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
+                    b.Property<int>("TodaysEarnings")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TodaysHours")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TotalHoursWorked")
+                        .HasColumnType("double precision");
+
                     b.Property<int>("TotalSalary")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("isWorking")
-                        .HasColumnType("boolean");
-
                     b.HasDiscriminator().HasValue("Timing");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "125841cd-8e07-4aa3-a23b-91a56b2e7153",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d42cd360-4219-478a-9c5b-cdef20cb121d",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "ZEUS",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "793bc3f1-5412-4189-9a28-30a3d1651750",
+                            TwoFactorEnabled = false,
+                            UserName = "zeus",
+                            CheckIn = new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925),
+                            CheckOut = new DateTime(2023, 2, 26, 13, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925),
+                            IsWorking = false,
+                            Schedule = new[] { 1, 5, 2, 4 },
+                            TodaysEarnings = 0,
+                            TodaysHours = 0,
+                            TotalHoursWorked = 0.0,
+                            TotalSalary = 0
+                        },
+                        new
+                        {
+                            Id = "6e87d51f-16eb-4488-9de1-d24da5459d9c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "8fa2547c-dde8-4498-a3cf-42286ed3945a",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "RIOT",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "333a4e0f-9d4e-427c-bb69-83c6f1043bc5",
+                            TwoFactorEnabled = false,
+                            UserName = "riot",
+                            CheckIn = new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977),
+                            CheckOut = new DateTime(2023, 2, 26, 17, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977),
+                            IsWorking = false,
+                            Schedule = new[] { 6, 0 },
+                            TodaysEarnings = 0,
+                            TodaysHours = 0,
+                            TotalHoursWorked = 0.0,
+                            TotalSalary = 0
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

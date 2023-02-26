@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TimeKeeper.Models;
+using TimeKeeper.Models.DTO;
 using TimeKeeper.Services;
 
 namespace TimeKeeper.Controllers;
@@ -14,10 +16,32 @@ public class StaffController : Controller
         _info = info;
     }
 
-    // public async Task<ActionResult<Timing>> Checkin(Timing timing)
-    // {
-    //     throw NotImplementedException();
-    // }
+    [HttpPost("/checkin")]
+    public async Task<ActionResult<Timing>> Checkin(CheckInDTO dto)
+    {
+        if (ModelState.IsValid)
+        {
+            _info.CheckIn(dto);
+            return Ok();
+        }
+
+        return BadRequest();
+    }
+    
+    [HttpPost("/checkout")]
+    public async Task<ActionResult<Timing>> Checkout(CheckOutDTO dto)
+    {
+        if (ModelState.IsValid)
+        {
+            _info.CheckOut(dto);
+            _info.CalculateHours(dto.Id);
+            _info.CalculateEverydayEarnings(dto.Id);
+
+            return Ok();
+        }
+
+        return BadRequest();
+    }
 
     [HttpGet("/schedule")]
     public async Task<ActionResult<Timing>> GetSchedule(string id)
@@ -25,6 +49,28 @@ public class StaffController : Controller
         if (id != null)
         {
             return Ok(_info.GetSchedule(id));
+        }
+
+        return BadRequest();
+    }
+    
+    [HttpGet("/salary")]
+    public async Task<ActionResult<Timing>> GetSalary(string id)
+    {
+        if (id != null)
+        {
+            return Ok(_info.GetTotalSalary(id));
+        }
+
+        return BadRequest();
+    }
+    
+    [HttpGet("/hours")]
+    public async Task<ActionResult<Timing>> GetHoursWorked(string id)
+    {
+        if (id != null)
+        {
+            return Ok(_info.GetTotalHoursWorked(id));
         }
 
         return BadRequest();
