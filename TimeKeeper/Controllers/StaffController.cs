@@ -22,6 +22,7 @@ public class StaffController : Controller
         if (ModelState.IsValid)
         {
             _info.CheckIn(dto);
+            await _info.SaveChanges();
             return Ok();
         }
 
@@ -36,6 +37,7 @@ public class StaffController : Controller
             _info.CheckOut(dto);
             _info.CalculateHours(dto.Id);
             _info.CalculateEverydayEarnings(dto.Id);
+            await _info.SaveChanges();
 
             return Ok();
         }

@@ -12,9 +12,9 @@ public interface IInfoService
 
     // Calculations
     TimeSpan CalculateHours(string id);
-    void TotalHours(string id);
-    void CalculateEverydayEarnings(string id);
-    void TotalEarnings(string id);
+    double TotalHours(string id);
+    double CalculateEverydayEarnings(string id);
+    int TotalEarnings(string id);
     
     // Get Props
     List<DayOfWeek> GetSchedule(string id);

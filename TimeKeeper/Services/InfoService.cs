@@ -18,21 +18,26 @@ public class InfoService : IInfoService
         var checkIn = new Timing
         {
             CheckIn = inDto.CheckInTime,
-            IsWorking = true
+            IsWorking = true,
         };
         _ctx.Timings.Add(checkIn);
-        SaveChanges();
     }
 
     public void CheckOut(CheckOutDTO outDto)
     {
+        
+        /* Select Id
+         Insert CheckOut time
+         Insert Calculations
+         Save to DB
+         */
+
         var checkOut = new Timing
         {
             CheckOut = outDto.CheckOutTime,
             IsWorking = false
         };
         _ctx.Timings.Add(checkOut);
-        SaveChanges();
     }
 
     /* Calculate everyday hours
@@ -49,42 +54,40 @@ public class InfoService : IInfoService
                 checkouttime = x.CheckOut
             })
             .FirstOrDefault();
-        var hours = item.checkouttime - item.checkintime;
-        _ctx.Timings.Add(new Timing() { TodaysHours = hours.TotalHours });
-        return hours;
+        return item.checkouttime - item.checkintime;
     }
-
-    /* Calculate overall hours worked
-     Add TotalHoursWorked to DB
-     */
-    public void TotalHours(string id)
-    {
-        var item = _ctx.Timings.Where(t => t.Id == id)
-            .Sum(x => x.TodaysHours);
-
-        _ctx.Timings.Add(new Timing() { TotalHoursWorked = item });
-    }
-
+    
     /* Calculates everyday earnings
-     Add TotalSalary to DB
+     returns double
      */
-    public void CalculateEverydayEarnings(string id)
+    public double CalculateEverydayEarnings(string id)
     {
         var hours = CalculateHours(id);
         var earnings = hours.TotalHours * 178;
 
-        _ctx.Timings.Add(new Timing() { TodaysEarnings = (int)earnings });
+        return earnings;
+    }
+    
+    /* Calculate overall hours worked
+     returns double
+     */
+    public double TotalHours(string id)
+    {
+        var item = _ctx.Timings.Where(t => t.Id == id)
+            .Sum(x => x.TodaysHours);
+
+        return item;
     }
     
     /* Calculate Overall Earnings
-     Add TotalSalary to DB
+     returns double
      */
-    public void TotalEarnings(string id)
+    public int TotalEarnings(string id)
     {
         var item = _ctx.Timings.Where(t => t.Id == id)
             .Sum(x => x.TodaysEarnings);
 
-        _ctx.Timings.Add(new Timing() { TotalSalary = item });
+        return item;
     }
 
     public List<DayOfWeek> GetSchedule(string id)
