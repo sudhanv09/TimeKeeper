@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TimeKeeper.Data;
@@ -11,9 +12,11 @@ using TimeKeeper.Data;
 namespace TimeKeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227152739_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,6 +249,7 @@ namespace TimeKeeper.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<int[]>("Schedule")
+                        .IsRequired()
                         .HasColumnType("integer[]");
 
                     b.Property<int>("TodaysEarnings")
@@ -276,27 +280,27 @@ namespace TimeKeeper.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f3488933-e220-4e2f-8c17-0aa47df5de02",
+                            Id = "1fc32a25-df05-47f2-97ff-3d65c51415b6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b78e5189-8b6b-4ad6-97ed-28c1ccdaa50b",
+                            ConcurrencyStamp = "c0e42e82-0143-474d-a66c-3c8ca4ccbfa4",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ZEUS",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f806d5b7-3f81-4576-a022-a071ec281f21",
+                            SecurityStamp = "40f0452e-10b6-475c-a56b-fe98b6f95a62",
                             TwoFactorEnabled = false,
                             UserName = "zeus"
                         },
                         new
                         {
-                            Id = "72e594fb-df43-40ff-abc2-47979b0c6efe",
+                            Id = "af44d2b5-a6eb-4cfa-8091-fa64550327a5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad0fe893-1ac2-42bc-b8f2-eceed234e704",
+                            ConcurrencyStamp = "73bb8fc0-3eb3-4c44-a486-376df30d4553",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "RIOT",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "da4c04ef-249c-4284-96da-a08d8d2123dd",
+                            SecurityStamp = "1359c106-4b48-490f-b0eb-731fd66d50fb",
                             TwoFactorEnabled = false,
                             UserName = "riot"
                         });

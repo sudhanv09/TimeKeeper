@@ -12,9 +12,9 @@ namespace TimeKeeper.Controllers;
 public class UserController : Controller
 {
     private IInfoService _info { get; set; }
-    private UserManager<Timing> _user { get; set; }
+    private UserManager<Employee> _user { get; set; }
 
-    public UserController(IInfoService info, UserManager<Timing> user)
+    public UserController(IInfoService info, UserManager<Employee> user)
     {
         _info = info;
         _user = user;
@@ -25,11 +25,11 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _user.CreateAsync(new Timing()
+            var result = await _user.CreateAsync(new Employee()
             {
                 UserName = staff.Username,
-                NormalizedEmail = staff.Username.ToUpper(),
-                Schedule = staff.Schedule
+                NormalizedUserName = staff.Username.ToUpper(),
+                TimingInfo = new List<Timing>(){new Timing(){Schedule = staff.Schedule}}
             });
 
             if (result.Succeeded)

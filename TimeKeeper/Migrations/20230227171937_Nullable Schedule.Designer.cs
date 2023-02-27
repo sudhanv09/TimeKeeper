@@ -12,8 +12,8 @@ using TimeKeeper.Data;
 namespace TimeKeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230226100226_Init db with seed")]
-    partial class Initdbwithseed
+    [Migration("20230227171937_Nullable Schedule")]
+    partial class NullableSchedule
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,7 +231,9 @@ namespace TimeKeeper.Migrations
 
             modelBuilder.Entity("TimeKeeper.Models.Timing", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CheckIn")
                         .HasColumnType("timestamp with time zone");
@@ -239,18 +241,21 @@ namespace TimeKeeper.Migrations
                     b.Property<DateTime>("CheckOut")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsWorking")
                         .HasColumnType("boolean");
 
                     b.Property<int[]>("Schedule")
-                        .IsRequired()
                         .HasColumnType("integer[]");
 
                     b.Property<int>("TodaysEarnings")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TodaysHours")
-                        .HasColumnType("integer");
+                    b.Property<double>("TodaysHours")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("TotalHoursWorked")
                         .HasColumnType("double precision");
@@ -258,50 +263,45 @@ namespace TimeKeeper.Migrations
                     b.Property<int>("TotalSalary")
                         .HasColumnType("integer");
 
-                    b.HasDiscriminator().HasValue("Timing");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Timings");
+                });
+
+            modelBuilder.Entity("TimeKeeper.Models.Employee", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.HasDiscriminator().HasValue("Employee");
 
                     b.HasData(
                         new
                         {
-                            Id = "125841cd-8e07-4aa3-a23b-91a56b2e7153",
+                            Id = "f3488933-e220-4e2f-8c17-0aa47df5de02",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d42cd360-4219-478a-9c5b-cdef20cb121d",
+                            ConcurrencyStamp = "b78e5189-8b6b-4ad6-97ed-28c1ccdaa50b",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ZEUS",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "793bc3f1-5412-4189-9a28-30a3d1651750",
+                            SecurityStamp = "f806d5b7-3f81-4576-a022-a071ec281f21",
                             TwoFactorEnabled = false,
-                            UserName = "zeus",
-                            CheckIn = new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925),
-                            CheckOut = new DateTime(2023, 2, 26, 13, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925),
-                            IsWorking = false,
-                            Schedule = new[] { 1, 5, 2, 4 },
-                            TodaysEarnings = 0,
-                            TodaysHours = 0,
-                            TotalHoursWorked = 0.0,
-                            TotalSalary = 0
+                            UserName = "zeus"
                         },
                         new
                         {
-                            Id = "6e87d51f-16eb-4488-9de1-d24da5459d9c",
+                            Id = "72e594fb-df43-40ff-abc2-47979b0c6efe",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8fa2547c-dde8-4498-a3cf-42286ed3945a",
+                            ConcurrencyStamp = "ad0fe893-1ac2-42bc-b8f2-eceed234e704",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "RIOT",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "333a4e0f-9d4e-427c-bb69-83c6f1043bc5",
+                            SecurityStamp = "da4c04ef-249c-4284-96da-a08d8d2123dd",
                             TwoFactorEnabled = false,
-                            UserName = "riot",
-                            CheckIn = new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977),
-                            CheckOut = new DateTime(2023, 2, 26, 17, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977),
-                            IsWorking = false,
-                            Schedule = new[] { 6, 0 },
-                            TodaysEarnings = 0,
-                            TodaysHours = 0,
-                            TotalHoursWorked = 0.0,
-                            TotalSalary = 0
+                            UserName = "riot"
                         });
                 });
 
@@ -354,6 +354,22 @@ namespace TimeKeeper.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TimeKeeper.Models.Timing", b =>
+                {
+                    b.HasOne("TimeKeeper.Models.Employee", "Employee")
+                        .WithMany("TimingInfo")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("TimeKeeper.Models.Employee", b =>
+                {
+                    b.Navigation("TimingInfo");
                 });
 #pragma warning restore 612, 618
         }

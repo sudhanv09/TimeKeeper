@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TimeKeeper.Migrations
 {
     /// <inheritdoc />
-    public partial class Initdbwithseed : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,14 +34,6 @@ namespace TimeKeeper.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
-                    CheckIn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CheckOut = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    IsWorking = table.Column<bool>(type: "boolean", nullable: true),
-                    TodaysEarnings = table.Column<int>(type: "integer", nullable: true),
-                    TodaysHours = table.Column<int>(type: "integer", nullable: true),
-                    TotalSalary = table.Column<int>(type: "integer", nullable: true),
-                    TotalHoursWorked = table.Column<double>(type: "double precision", nullable: true),
-                    Schedule = table.Column<int[]>(type: "integer[]", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -168,13 +160,39 @@ namespace TimeKeeper.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Timings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false),
+                    CheckIn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CheckOut = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsWorking = table.Column<bool>(type: "boolean", nullable: false),
+                    TodaysEarnings = table.Column<int>(type: "integer", nullable: false),
+                    TodaysHours = table.Column<double>(type: "double precision", nullable: false),
+                    TotalSalary = table.Column<int>(type: "integer", nullable: false),
+                    TotalHoursWorked = table.Column<double>(type: "double precision", nullable: false),
+                    Schedule = table.Column<int[]>(type: "integer[]", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Timings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Timings_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "CheckIn", "CheckOut", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "IsWorking", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Schedule", "SecurityStamp", "TodaysEarnings", "TodaysHours", "TotalHoursWorked", "TotalSalary", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "125841cd-8e07-4aa3-a23b-91a56b2e7153", 0, new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925), new DateTime(2023, 2, 26, 13, 2, 26, 715, DateTimeKind.Utc).AddTicks(4925), "d42cd360-4219-478a-9c5b-cdef20cb121d", "Timing", null, false, false, false, null, null, "ZEUS", null, null, false, new[] { 1, 5, 2, 4 }, "793bc3f1-5412-4189-9a28-30a3d1651750", 0, 0, 0.0, 0, false, "zeus" },
-                    { "6e87d51f-16eb-4488-9de1-d24da5459d9c", 0, new DateTime(2023, 2, 26, 10, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977), new DateTime(2023, 2, 26, 17, 2, 26, 715, DateTimeKind.Utc).AddTicks(4977), "8fa2547c-dde8-4498-a3cf-42286ed3945a", "Timing", null, false, false, false, null, null, "RIOT", null, null, false, new[] { 6, 0 }, "333a4e0f-9d4e-427c-bb69-83c6f1043bc5", 0, 0, 0.0, 0, false, "riot" }
+                    { "1fc32a25-df05-47f2-97ff-3d65c51415b6", 0, "c0e42e82-0143-474d-a66c-3c8ca4ccbfa4", "Employee", null, false, false, null, null, "ZEUS", null, null, false, "40f0452e-10b6-475c-a56b-fe98b6f95a62", false, "zeus" },
+                    { "af44d2b5-a6eb-4cfa-8091-fa64550327a5", 0, "73bb8fc0-3eb3-4c44-a486-376df30d4553", "Employee", null, false, false, null, null, "RIOT", null, null, false, "1359c106-4b48-490f-b0eb-731fd66d50fb", false, "riot" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -213,6 +231,11 @@ namespace TimeKeeper.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Timings_EmployeeId",
+                table: "Timings",
+                column: "EmployeeId");
         }
 
         /// <inheritdoc />
@@ -232,6 +255,9 @@ namespace TimeKeeper.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Timings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

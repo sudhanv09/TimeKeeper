@@ -25,7 +25,7 @@ public class StaffController : Controller
             await _info.SaveChanges();
             return Ok();
         }
-
+    
         return BadRequest();
     }
     
@@ -35,16 +35,14 @@ public class StaffController : Controller
         if (ModelState.IsValid)
         {
             _info.CheckOut(dto);
-            _info.CalculateHours(dto.Id);
-            _info.CalculateEverydayEarnings(dto.Id);
             await _info.SaveChanges();
-
+    
             return Ok();
         }
-
+    
         return BadRequest();
     }
-
+    
     [HttpGet("/schedule")]
     public async Task<ActionResult<Timing>> GetSchedule(string id)
     {
@@ -52,7 +50,7 @@ public class StaffController : Controller
         {
             return Ok(_info.GetSchedule(id));
         }
-
+    
         return BadRequest();
     }
     
@@ -63,7 +61,7 @@ public class StaffController : Controller
         {
             return Ok(_info.GetTotalSalary(id));
         }
-
+    
         return BadRequest();
     }
     
@@ -74,7 +72,7 @@ public class StaffController : Controller
         {
             return Ok(_info.GetTotalHoursWorked(id));
         }
-
+    
         return BadRequest();
     }
     

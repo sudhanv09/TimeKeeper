@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInfoService, InfoService>();
-builder.Services.AddIdentity<Timing, IdentityRole>()
+builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
