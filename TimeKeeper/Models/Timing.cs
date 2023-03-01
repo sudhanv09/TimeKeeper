@@ -14,5 +14,4 @@ public class Timing
     public double TodaysHours { get; set; }
     public int TotalSalary { get; set; }
     public double TotalHoursWorked { get; set; }
-    public List<DayOfWeek>? Schedule { get; set; }
 }

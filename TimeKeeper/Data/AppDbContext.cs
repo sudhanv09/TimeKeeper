@@ -26,12 +26,21 @@ public class AppDbContext : IdentityDbContext
             .HasData(new Employee()
                 {
                     UserName = "zeus",
-                    NormalizedUserName = "ZEUS"
+                    NormalizedUserName = "ZEUS",
+                    Schedule = new List<DayOfWeek>()
+                    {
+                        DayOfWeek.Monday , DayOfWeek.Tuesday, DayOfWeek.Wednesday
+                    }
+                    
                 },
                 new Employee()
                 {
                     UserName = "riot",
-                    NormalizedUserName = "RIOT"
+                    NormalizedUserName = "RIOT",
+                    Schedule = new List<DayOfWeek>()
+                    {
+                        DayOfWeek.Friday , DayOfWeek.Saturday, DayOfWeek.Sunday
+                    }
                 });
     }
 }

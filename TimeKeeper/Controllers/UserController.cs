@@ -29,7 +29,7 @@ public class UserController : Controller
             {
                 UserName = staff.Username,
                 NormalizedUserName = staff.Username.ToUpper(),
-                TimingInfo = new List<Timing>(){new Timing(){Schedule = staff.Schedule}}
+                Schedule = staff.Schedule
             });
 
             if (result.Succeeded)

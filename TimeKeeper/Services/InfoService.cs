@@ -37,14 +37,15 @@ public class InfoService : IInfoService
     public void CheckOut(CheckOutDTO outDto)
     {
         var working = _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
+            .OrderBy(d=>d.IsWorking)
             .Select(x=> new {status = x.IsWorking})
-            .FirstOrDefault();
-
+            .LastOrDefault();
+        
         if (working.status)
         {
             _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
                 .ExecuteUpdate(p =>
-                    p.SetProperty(x => x.CheckOut, DateTime.UtcNow)
+                    p.SetProperty(x => x.CheckOut, outDto.CheckOutTime)
                         .SetProperty(x=>x.IsWorking, false));
             
             _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
@@ -60,7 +61,6 @@ public class InfoService : IInfoService
     /* Calculate everyday hours
      returns TimeSpan hours
      */
-    
     public TimeSpan CalculateHours(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
@@ -90,7 +90,8 @@ public class InfoService : IInfoService
     public double TotalHours(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
-            .Sum(x => x.TodaysHours);
+            .Select(x=> x.TodaysHours)
+            .Sum();
     
         return item;
     }
@@ -101,7 +102,8 @@ public class InfoService : IInfoService
     public int TotalEarnings(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
-            .Sum(x => x.TodaysEarnings);
+        .Select(x => x.TodaysEarnings)
+        .Sum();
     
         return item;
     }
@@ -109,7 +111,7 @@ public class InfoService : IInfoService
     public List<DayOfWeek> GetSchedule(string id)
     {
         
-        var item = _ctx.Timings.Where(t => t.EmployeeId == id)
+        var item = _ctx.Employees.Where(t => t.Id == id)
             .Select(x => new
             {
                 schedule = x.Schedule
