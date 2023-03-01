@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using TimeKeeper.Data;
 using TimeKeeper.Models;
@@ -14,13 +13,13 @@ public class InfoService : IInfoService
     {
         _ctx = ctx;
     }
-    
+
     public void CheckIn(CheckInDTO inDto)
     {
         var working = _ctx.Timings.Where(x => x.EmployeeId == inDto.Id)
-            .Select(x=> new {status = x.IsWorking})
+            .Select(x => new { status = x.IsWorking })
             .FirstOrDefault();
-        
+
         // working is null if user not in Timings table
         if (working == null || working.status == false)
         {
@@ -29,35 +28,32 @@ public class InfoService : IInfoService
                 EmployeeId = inDto.Id,
                 CheckIn = inDto.CheckInTime,
                 IsWorking = true
-            }; 
-            _ctx.Timings.Add(item);    
+            };
+            _ctx.Timings.Add(item);
         }
     }
-    
+
     public void CheckOut(CheckOutDTO outDto)
     {
-        var working = _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
-            .OrderBy(d=>d.IsWorking)
-            .Select(x=> new {status = x.IsWorking})
-            .LastOrDefault();
+        var target = _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
+            .OrderByDescending(x => x.IsWorking)
+            .Select(x => x.Id)
+            .FirstOrDefault();
         
-        if (working.status)
-        {
-            _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
-                .ExecuteUpdate(p =>
-                    p.SetProperty(x => x.CheckOut, outDto.CheckOutTime)
-                        .SetProperty(x=>x.IsWorking, false));
-            
-            _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
-                .ExecuteUpdate(p =>
-                    p.SetProperty(x => x.TodaysHours, CalculateHours(outDto.Id).TotalHours)
+        _ctx.Timings.Where(x => x.Id == target)
+            .ExecuteUpdate(p =>
+                p.SetProperty(x => x.CheckOut, outDto.CheckOutTime)
+                    .SetProperty(x => x.IsWorking, false));
+        // Update Checkout Time first
+        _ctx.Timings.Where(x => x.Id == target)
+            .ExecuteUpdate(p =>
+                p.SetProperty(x => x.TodaysHours, CalculateHours(outDto.Id).TotalHours)
                     .SetProperty(x => x.TodaysEarnings, CalculateEverydayEarnings(outDto.Id))
                     .SetProperty(x => x.TotalHoursWorked, TotalHours(outDto.Id))
                     .SetProperty(x => x.TotalSalary, TotalEarnings(outDto.Id))
-                    );
-        }
+            );
     }
-    
+
     /* Calculate everyday hours
      returns TimeSpan hours
      */
@@ -72,45 +68,44 @@ public class InfoService : IInfoService
             .FirstOrDefault();
         return item.checkouttime - item.checkintime;
     }
-    
+
     /* Calculates everyday earnings
      returns double
      */
-    public double CalculateEverydayEarnings(string id)
+    public int CalculateEverydayEarnings(string id)
     {
         var hours = CalculateHours(id);
         var earnings = hours.TotalHours * 178;
-    
-        return earnings;
+
+        return (int)earnings;
     }
-    
+
     /* Calculate overall hours worked
      returns double
      */
     public double TotalHours(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
-            .Select(x=> x.TodaysHours)
+            .Select(x => x.TodaysHours)
             .Sum();
-    
-        return item;
+
+        return item + CalculateHours(id).TotalHours;
     }
-    
+
     /* Calculate Overall Earnings
      returns double
      */
     public int TotalEarnings(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
-        .Select(x => x.TodaysEarnings)
-        .Sum();
-    
-        return item;
+            .Select(x => x.TodaysEarnings)
+            .Sum();
+
+        return item + CalculateEverydayEarnings(id);
     }
-    
+
     public List<DayOfWeek> GetSchedule(string id)
     {
-        
         var item = _ctx.Employees.Where(t => t.Id == id)
             .Select(x => new
             {
@@ -119,7 +114,7 @@ public class InfoService : IInfoService
             .FirstOrDefault();
         return item.schedule;
     }
-    
+
     public int GetTotalSalary(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
@@ -130,7 +125,7 @@ public class InfoService : IInfoService
             .FirstOrDefault();
         return item.salary;
     }
-    
+
     public double GetTotalHoursWorked(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
@@ -141,7 +136,7 @@ public class InfoService : IInfoService
             .FirstOrDefault();
         return item.hours;
     }
-    
+
     public async Task<bool> SaveChanges()
     {
         if (await _ctx.SaveChangesAsync() > 0)

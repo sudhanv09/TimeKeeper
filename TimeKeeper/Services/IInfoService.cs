@@ -13,7 +13,7 @@ public interface IInfoService
     // // Calculations
     TimeSpan CalculateHours(string id);
     double TotalHours(string id);
-    double CalculateEverydayEarnings(string id);
+    int CalculateEverydayEarnings(string id);
     int TotalEarnings(string id);
     
     // Get Props
