@@ -1,4 +1,5 @@
 import './globals.css'
+import LoggedInNav from "./components/nav"
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <LoggedInNav />
+        {children}
+      </body>
     </html>
   )
 }
