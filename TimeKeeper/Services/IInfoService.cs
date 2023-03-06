@@ -10,7 +10,7 @@ public interface IInfoService
     void CheckIn(CheckInDTO inDto);
     void CheckOut(CheckOutDTO outDto);
     
-    // // Calculations
+    // Calculations
     TimeSpan CalculateHours(string id);
     double TotalHours(string id);
     int CalculateEverydayEarnings(string id);

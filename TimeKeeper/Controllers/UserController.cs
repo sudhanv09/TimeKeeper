@@ -25,12 +25,14 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _user.CreateAsync(new Employee()
+            var user = new Employee()
             {
                 UserName = staff.Username,
                 NormalizedUserName = staff.Username.ToUpper(),
+                Email = staff.Email,
                 Schedule = staff.Schedule
-            });
+            };
+            var result = await _user.CreateAsync(user, staff.Password);
 
             if (result.Succeeded)
             {

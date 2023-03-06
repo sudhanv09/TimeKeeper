@@ -118,6 +118,7 @@ public class InfoService : IInfoService
     public int GetTotalSalary(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
+            .OrderByDescending(x=>x.TotalSalary)
             .Select(x => new
             {
                 salary = x.TotalSalary
@@ -129,6 +130,7 @@ public class InfoService : IInfoService
     public double GetTotalHoursWorked(string id)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
+            .OrderByDescending(x=>x.TotalHoursWorked)
             .Select(x => new
             {
                 hours = x.TotalHoursWorked
