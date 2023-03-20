@@ -7,10 +7,10 @@ export default function Nav()
                 <a href="/" className="text-white hover:text-gray-400">Logo</a>
             <ul className="flex items-centers space-x-2">
                 <li>
-                <a href="/" className="text-white hover:text-gray-400">Home</a>
+                <a href="/login" className="text-white hover:text-gray-400">Login</a>
                 </li>
                 <li>
-                <a href="/" className="text-white hover:text-gray-400">Login</a>
+                <a href="/register" className="text-white hover:text-gray-400">Register</a>
                 </li>
             </ul>
         </div>
