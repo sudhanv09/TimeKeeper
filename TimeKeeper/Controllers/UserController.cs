@@ -49,7 +49,7 @@ public class UserController : Controller
                 }
         }
 
-        return BadRequest();
+        return BadRequest("Input not valid");
     }
     
     [HttpPost]

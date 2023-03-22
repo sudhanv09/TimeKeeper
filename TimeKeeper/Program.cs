@@ -8,20 +8,22 @@ using TimeKeeper.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInfoService, InfoService>();
 builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(s=>
+        s.WithOrigins("*")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    // Password settings.
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = false;
@@ -48,9 +50,10 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHsts();
 // app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
