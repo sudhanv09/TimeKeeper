@@ -11,10 +11,10 @@ public interface IInfoService
     void CheckOut(CheckOutDTO outDto);
     
     // Calculations
-    TimeSpan CalculateHours(string id);
-    double TotalHours(string id);
-    int CalculateEverydayEarnings(string id);
-    int TotalEarnings(string id);
+    TimeSpan CalculateHours(string id, DateTime time);
+    double TotalHours(string id, DateTime time);
+    int CalculateEverydayEarnings(string id, DateTime time);
+    int TotalEarnings(string id, DateTime time);
     
     // Get Props
     List<DayOfWeek> GetSchedule(string id);

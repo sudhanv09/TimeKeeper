@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext
 
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Timing> Timings { get; set; }
+    public DbSet<Reserve> Reservation { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

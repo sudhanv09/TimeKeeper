@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,18 +38,19 @@ public class UserController : Controller
                 Schedule = staff.Schedule
             };
             var result = await _user.CreateAsync(user, staff.Password);
-
             if (result.Succeeded)
             {
-                return Ok(result);
+                return Ok(user);
             }
             else
+            {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
+                return BadRequest(result.Errors);
+            }
         }
-
         return BadRequest("Input not valid");
     }
     
@@ -60,15 +62,8 @@ public class UserController : Controller
         {
             return BadRequest();        
         }
-
         var userExists = await _user.FindByNameAsync(login.Username);
         if (userExists == null)
-        {
-            return BadRequest();
-        }
-
-        var passCheck = _user.PasswordHasher.VerifyHashedPassword(userExists, userExists.PasswordHash, login.Password);
-        if (passCheck == PasswordVerificationResult.Failed)
         {
             return BadRequest();
         }
@@ -76,14 +71,12 @@ public class UserController : Controller
         return Ok(result.Succeeded);
     }
     
-    
     [HttpPost]
     [Route("logout")]
     public async Task<IActionResult> Logout()
     {
         await _SignIn.SignOutAsync();
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         return Ok("User Logged Out");
     }
-
-    
 }

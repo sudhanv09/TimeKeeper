@@ -10,7 +10,6 @@ namespace TimeKeeper.Controllers;
 public class StaffController : Controller
 {
     private IInfoService _info { get; set; }
-
     public StaffController(IInfoService info)
     {
         _info = info;
@@ -22,10 +21,8 @@ public class StaffController : Controller
         if (ModelState.IsValid)
         {
             _info.CheckIn(dto);
-            await _info.SaveChanges();
             return Ok();
         }
-    
         return BadRequest();
     }
     
@@ -35,11 +32,8 @@ public class StaffController : Controller
         if (ModelState.IsValid)
         {
             _info.CheckOut(dto);
-            await _info.SaveChanges();
-    
             return Ok();
         }
-    
         return BadRequest();
     }
     
@@ -50,7 +44,6 @@ public class StaffController : Controller
         {
             return Ok(_info.GetSchedule(id));
         }
-    
         return BadRequest();
     }
     
@@ -61,7 +54,6 @@ public class StaffController : Controller
         {
             return Ok(_info.GetTotalSalary(id));
         }
-    
         return BadRequest();
     }
     
@@ -72,7 +64,6 @@ public class StaffController : Controller
         {
             return Ok(_info.GetTotalHoursWorked(id));
         }
-    
         return BadRequest();
     }
     

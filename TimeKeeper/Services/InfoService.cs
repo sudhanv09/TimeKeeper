@@ -16,12 +16,10 @@ public class InfoService : IInfoService
 
     public void CheckIn(CheckInDTO inDto)
     {
-        var working = _ctx.Timings.Where(x => x.EmployeeId == inDto.Id)
-            .Select(x => new { status = x.IsWorking })
-            .FirstOrDefault();
+        var working = _ctx.Timings.FirstOrDefault(x => x.EmployeeId == inDto.Id);
 
-        // working is null if user not in Timings table
-        if (working == null || working.status == false)
+        // working is null if user not in Timings but in user table
+        if (working == null || !working.IsWorking)
         {
             var item = new Timing()
             {
@@ -30,51 +28,55 @@ public class InfoService : IInfoService
                 IsWorking = true
             };
             _ctx.Timings.Add(item);
+            _ctx.SaveChangesAsync();
+        }
+        else
+        {
+            throw new InvalidOperationException("Employee already checked in");
         }
     }
 
     public void CheckOut(CheckOutDTO outDto)
     {
-        var target = _ctx.Timings.Where(x => x.EmployeeId == outDto.Id)
-            .OrderByDescending(x => x.IsWorking)
-            .Select(x => x.Id)
+        var mostRecentTiming = _ctx.Timings
+            .Where(t => t.EmployeeId == outDto.Id && t.IsWorking)
+            .OrderByDescending(t => t.CheckIn)
             .FirstOrDefault();
-        
-        _ctx.Timings.Where(x => x.Id == target)
-            .ExecuteUpdate(p =>
-                p.SetProperty(x => x.CheckOut, outDto.CheckOutTime)
-                    .SetProperty(x => x.IsWorking, false));
-        // Update Checkout Time first
-        _ctx.Timings.Where(x => x.Id == target)
-            .ExecuteUpdate(p =>
-                p.SetProperty(x => x.TodaysHours, CalculateHours(outDto.Id).TotalHours)
-                    .SetProperty(x => x.TodaysEarnings, CalculateEverydayEarnings(outDto.Id))
-                    .SetProperty(x => x.TotalHoursWorked, TotalHours(outDto.Id))
-                    .SetProperty(x => x.TotalSalary, TotalEarnings(outDto.Id))
-            );
+
+        if (mostRecentTiming == null)
+        {
+            throw new ArgumentException("Employee has no active timing entries");
+        }
+        // Update all fields
+        mostRecentTiming.CheckOut = outDto.CheckOutTime;
+        mostRecentTiming.IsWorking = false;
+        mostRecentTiming.TodaysHours = CalculateHours(outDto.Id, outDto.CheckOutTime).TotalHours;;
+        mostRecentTiming.TodaysEarnings = CalculateEverydayEarnings(outDto.Id, outDto.CheckOutTime);
+        mostRecentTiming.TotalHoursWorked = TotalHours(outDto.Id, outDto.CheckOutTime);
+        mostRecentTiming.TotalSalary = TotalEarnings(outDto.Id, outDto.CheckOutTime);
+        _ctx.SaveChangesAsync();
     }
 
-    /* Calculate everyday hours
+    /* Calculate time difference between check-in and out time
      returns TimeSpan hours
      */
-    public TimeSpan CalculateHours(string id)
+    public TimeSpan CalculateHours(string id, DateTime time)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
             .Select(x => new
             {
                 checkintime = x.CheckIn,
-                checkouttime = x.CheckOut
             })
             .FirstOrDefault();
-        return item.checkouttime - item.checkintime;
+        return time - item.checkintime;
     }
 
-    /* Calculates everyday earnings
+    /* Calculate earnings
      returns double
      */
-    public int CalculateEverydayEarnings(string id)
+    public int CalculateEverydayEarnings(string id, DateTime time)
     {
-        var hours = CalculateHours(id);
+        var hours = CalculateHours(id, time);
         var earnings = hours.TotalHours * 178;
 
         return (int)earnings;
@@ -83,25 +85,25 @@ public class InfoService : IInfoService
     /* Calculate overall hours worked
      returns double
      */
-    public double TotalHours(string id)
+    public double TotalHours(string id, DateTime time)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
             .Select(x => x.TodaysHours)
             .Sum();
 
-        return item + CalculateHours(id).TotalHours;
+        return item + CalculateHours(id, time).TotalHours;
     }
 
     /* Calculate Overall Earnings
      returns double
      */
-    public int TotalEarnings(string id)
+    public int TotalEarnings(string id, DateTime time)
     {
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
             .Select(x => x.TodaysEarnings)
             .Sum();
 
-        return item + CalculateEverydayEarnings(id);
+        return item + CalculateEverydayEarnings(id, time);
     }
 
     public List<DayOfWeek> GetSchedule(string id)

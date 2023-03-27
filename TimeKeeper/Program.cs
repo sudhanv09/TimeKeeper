@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInfoService, InfoService>();
+builder.Services.AddScoped<IReserveService, ReserveService>();
 builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddCors(options =>
