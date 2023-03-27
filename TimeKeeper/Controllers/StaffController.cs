@@ -6,7 +6,7 @@ using TimeKeeper.Services;
 
 namespace TimeKeeper.Controllers;
 [ApiController]
-[Route("/staff/")]
+[Route("/staff")]
 public class StaffController : Controller
 {
     private IInfoService _info { get; set; }
@@ -15,7 +15,7 @@ public class StaffController : Controller
         _info = info;
     }
 
-    [HttpPost("/checkin")]
+    [HttpPost("checkin")]
     public async Task<ActionResult<Timing>> Checkin(CheckInDTO dto)
     {
         if (ModelState.IsValid)
@@ -26,7 +26,7 @@ public class StaffController : Controller
         return BadRequest();
     }
     
-    [HttpPost("/checkout")]
+    [HttpPost("checkout")]
     public async Task<ActionResult<Timing>> Checkout(CheckOutDTO dto)
     {
         if (ModelState.IsValid)
@@ -37,7 +37,7 @@ public class StaffController : Controller
         return BadRequest();
     }
     
-    [HttpGet("/schedule")]
+    [HttpGet("schedule")]
     public async Task<ActionResult<Timing>> GetSchedule(string id)
     {
         if (id != null)
@@ -47,7 +47,7 @@ public class StaffController : Controller
         return BadRequest();
     }
     
-    [HttpGet("/salary")]
+    [HttpGet("salary")]
     public async Task<ActionResult<Timing>> GetSalary(string id)
     {
         if (id != null)
@@ -57,7 +57,7 @@ public class StaffController : Controller
         return BadRequest();
     }
     
-    [HttpGet("/hours")]
+    [HttpGet("hours")]
     public async Task<ActionResult<Timing>> GetHoursWorked(string id)
     {
         if (id != null)

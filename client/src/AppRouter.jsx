@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import Nav from "./components/nav";
-import Home from "./components/home";
-import Login from "./components/login";
-import Admin from "./components/admin";
-import Register from "./components/register";
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Admin from "./pages/admin";
+import Register from "./pages/register";
 
 const App = () => {
   return (

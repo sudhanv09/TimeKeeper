@@ -28,7 +28,7 @@ public class ReservationController : Controller
         var getReservation = _rs.ReservationById(id);
         return Ok(getReservation);
     }
-    [HttpPost("/new")]
+    [HttpPost("new")]
     public async Task<ActionResult<Reserve>> NewReservation(ReserveDTO dto)
     {
         if (!ModelState.IsValid)
@@ -38,7 +38,7 @@ public class ReservationController : Controller
         _rs.NewReservation(dto);
         return Ok("Created new reservation");
     }
-    [HttpPatch("/update")]
+    [HttpPatch("update")]
     public async Task<ActionResult<Reserve>> UpdateReservation(ReserveDTO dto)
     {
         if (!ModelState.IsValid)
