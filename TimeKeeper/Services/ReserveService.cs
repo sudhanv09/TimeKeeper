@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TimeKeeper.Data;
 using TimeKeeper.Models;
 using TimeKeeper.Models.DTO;
@@ -12,52 +13,54 @@ public class ReserveService : IReserveService
     {
         _ctx = ctx;
     }
-    public List<Reserve> GetAllReservations()
+    public async Task<List<Reserve>> GetAllReservations()
     {
-        var allGuests = _ctx.Reservation.Where(t => t.Booking == DateTime.Today).ToList();
+        var allGuests = await _ctx.Reservation.Where(t => t.Booking.Date.Equals(DateTime.UtcNow.Date)).ToListAsync();
         return allGuests;
     }
 
-    public Reserve ReservationById(string id)
+    public Reserve GetReservationById(string id)
     {
-        var guest = _ctx.Reservation.SingleOrDefault(i => i.Id.Equals(id));
-        return guest;
-    }
-
-    public bool CheckReturnCustomer(string id)
-    {
-        var guest = ReservationById(id);
-        if (guest == null) return false;
-        var count = _ctx.Reservation.Where(p => p.PhoneNumber == guest.PhoneNumber).ToList().Count();
-        if (count > 1)
+        Reserve reservation = null;
+        if (Guid.TryParse(id, out Guid reservationId))
         {
-            return true;
+            try
+            {
+                reservation = _ctx.Reservation.FirstOrDefault(r => r.Id == reservationId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting reservation with id {id}: {ex.Message}");
+            }
         }
-        return false;
+        return reservation;
+    }
+    
+    public bool CheckReturnCustomer(string phoneNumber)
+    {
+        return _ctx.Reservation.Any(p => p.PhoneNumber.Equals(phoneNumber));
     }
 
-    public void NewReservation(ReserveDTO dto)
+    public async Task NewReservation(ReserveDTO dto)
     {
-        var returnGuest = CheckReturnCustomer(dto.Id);
         var newGuest = new Reserve()
         {
             Name = dto.Name,
             Booking = dto.BookingDate,
             PhoneNumber = dto.PhoneNumber,
-            ReturnCustomer = returnGuest
+            ReturnCustomer = CheckReturnCustomer(dto.PhoneNumber),
         };
         _ctx.Reservation.Add(newGuest);
-        _ctx.SaveChangesAsync();
+        await _ctx.SaveChangesAsync();
     }
 
-    public void UpdateReservation(ReserveDTO dto)
+    public async Task UpdateReservation(ReserveDTO dto)
     {
-        var guest = ReservationById(dto.Id);
-        if (guest == null) throw new Exception();
+        var guest = GetReservationById(dto.Id);
+        if (guest == null) throw new Exception("Guest not found");
         
         // No one updates Name and phone number, only datetime
         guest.Booking = dto.BookingDate;
-        _ctx.SaveChangesAsync();
+        await _ctx.SaveChangesAsync();
     }
-    
 }

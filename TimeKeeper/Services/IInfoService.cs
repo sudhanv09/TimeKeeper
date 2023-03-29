@@ -7,8 +7,8 @@ namespace TimeKeeper.Services;
 public interface IInfoService
 {
     // Actions
-    void CheckIn(CheckInDTO inDto);
-    void CheckOut(CheckOutDTO outDto);
+    Task CheckIn(CheckInDTO inDto);
+    Task CheckOut(CheckOutDTO outDto);
     
     // Calculations
     TimeSpan CalculateHours(string id, DateTime time);
@@ -20,7 +20,8 @@ public interface IInfoService
     List<DayOfWeek> GetSchedule(string id);
     int GetTotalSalary(string id);
     double GetTotalHoursWorked(string id);
-    
+    Task<List<Timing>> GetEmployeeInfo(string id);
+
     // Helper
     Task<bool> SaveChanges();
 }

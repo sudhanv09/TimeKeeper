@@ -5,9 +5,9 @@ namespace TimeKeeper.Services;
 
 public interface IReserveService
 {
-    List<Reserve> GetAllReservations();
-    Reserve ReservationById(string id);
-    bool CheckReturnCustomer(string id);
-    void NewReservation(ReserveDTO reserveDto);
-    void UpdateReservation(ReserveDTO reserveDto);
+    Task<List<Reserve>> GetAllReservations();
+    Reserve GetReservationById(string id);
+    bool CheckReturnCustomer(string phoneNumber);
+    Task NewReservation(ReserveDTO reserveDto);
+    Task UpdateReservation(ReserveDTO reserveDto);
 }

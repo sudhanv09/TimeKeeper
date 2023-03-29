@@ -14,7 +14,7 @@ public class InfoService : IInfoService
         _ctx = ctx;
     }
 
-    public void CheckIn(CheckInDTO inDto)
+    public async Task CheckIn(CheckInDTO inDto)
     {
         var working = _ctx.Timings.FirstOrDefault(x => x.EmployeeId == inDto.Id);
 
@@ -28,7 +28,7 @@ public class InfoService : IInfoService
                 IsWorking = true
             };
             _ctx.Timings.Add(item);
-            _ctx.SaveChangesAsync();
+            await _ctx.SaveChangesAsync();
         }
         else
         {
@@ -36,7 +36,7 @@ public class InfoService : IInfoService
         }
     }
 
-    public void CheckOut(CheckOutDTO outDto)
+    public async Task CheckOut(CheckOutDTO outDto)
     {
         var mostRecentTiming = _ctx.Timings
             .Where(t => t.EmployeeId == outDto.Id && t.IsWorking)
@@ -54,7 +54,7 @@ public class InfoService : IInfoService
         mostRecentTiming.TodaysEarnings = CalculateEverydayEarnings(outDto.Id, outDto.CheckOutTime);
         mostRecentTiming.TotalHoursWorked = TotalHours(outDto.Id, outDto.CheckOutTime);
         mostRecentTiming.TotalSalary = TotalEarnings(outDto.Id, outDto.CheckOutTime);
-        _ctx.SaveChangesAsync();
+        await _ctx.SaveChangesAsync();
     }
 
     /* Calculate time difference between check-in and out time
@@ -139,6 +139,12 @@ public class InfoService : IInfoService
             })
             .FirstOrDefault();
         return item.hours;
+    }
+
+    public async Task<List<Timing>> GetEmployeeInfo(string id)
+    {
+        var user = await _ctx.Timings.Where(i => i.EmployeeId == id).ToListAsync();
+        return user;
     }
 
     public async Task<bool> SaveChanges()

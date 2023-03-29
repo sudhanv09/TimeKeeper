@@ -20,7 +20,7 @@ export default function Login() {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center">
       <div className="bg-gray-100 px-10 py-20 rounded-lg border-2 border-black-100">
-      <form action="" id="login" method="post" onSubmit={postClick}>
+      <form id="login" method="post" onSubmit={postClick}>
         <h1 className="font-semibold text-5xl">Login</h1>
         <div className="mt-4">
           <label className="text-lg font-medium">Username</label>

@@ -66,5 +66,10 @@ public class StaffController : Controller
         }
         return BadRequest();
     }
-    
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Timing>> GetStaffDetails(string id)
+    {
+        return Ok(_info.GetEmployeeInfo(id));
+    }
 }

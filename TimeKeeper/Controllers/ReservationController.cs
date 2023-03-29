@@ -25,7 +25,7 @@ public class ReservationController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<Reserve>> GetReservationById(string id)
     {
-        var getReservation = _rs.ReservationById(id);
+        var getReservation = _rs.GetReservationById(id);
         return Ok(getReservation);
     }
     [HttpPost("new")]
@@ -38,14 +38,14 @@ public class ReservationController : Controller
         _rs.NewReservation(dto);
         return Ok("Created new reservation");
     }
-    [HttpPatch("update")]
-    public async Task<ActionResult<Reserve>> UpdateReservation(ReserveDTO dto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-        _rs.UpdateReservation(dto);
-        return Ok("Reservation Updated");
+     [HttpPatch("update")]
+     public async Task<ActionResult<Reserve>> UpdateReservation(ReserveDTO dto)
+     {
+         if (!ModelState.IsValid)
+         {
+             return BadRequest();
+         }
+         _rs.UpdateReservation(dto);
+         return Ok("Reservation Updated");
     }
 }
