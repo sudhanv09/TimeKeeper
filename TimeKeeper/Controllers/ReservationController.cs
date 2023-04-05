@@ -18,12 +18,12 @@ public class ReservationController : Controller
     [HttpGet]
     public async Task<ActionResult<Reserve>> GetReservations()
     {
-        var allGuests = _rs.GetAllReservations();
+        var allGuests = await _rs.GetAllReservations();
         return Ok(allGuests);
     }
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<Reserve>> GetReservationById(string id)
+    public ActionResult<Reserve> GetReservationById(string id)
     {
         var getReservation = _rs.GetReservationById(id);
         return Ok(getReservation);
@@ -35,7 +35,7 @@ public class ReservationController : Controller
         {
             return BadRequest();
         }
-        _rs.NewReservation(dto);
+        await _rs.NewReservation(dto);
         return Ok("Created new reservation");
     }
      [HttpPatch("update")]
@@ -45,7 +45,7 @@ public class ReservationController : Controller
          {
              return BadRequest();
          }
-         _rs.UpdateReservation(dto);
+         await _rs.UpdateReservation(dto);
          return Ok("Reservation Updated");
     }
 }

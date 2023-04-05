@@ -22,26 +22,5 @@ public class AppDbContext : IdentityDbContext
             .HasOne<Employee>(e => e.Employee)
             .WithMany(t => t.TimingInfo)
             .HasForeignKey(p => p.EmployeeId);
-
-        modelBuilder.Entity<Employee>()
-            .HasData(new Employee()
-                {
-                    UserName = "zeus",
-                    NormalizedUserName = "ZEUS",
-                    Schedule = new List<DayOfWeek>()
-                    {
-                        DayOfWeek.Monday , DayOfWeek.Tuesday, DayOfWeek.Wednesday
-                    }
-                    
-                },
-                new Employee()
-                {
-                    UserName = "riot",
-                    NormalizedUserName = "RIOT",
-                    Schedule = new List<DayOfWeek>()
-                    {
-                        DayOfWeek.Friday , DayOfWeek.Saturday, DayOfWeek.Sunday
-                    }
-                });
     }
 }

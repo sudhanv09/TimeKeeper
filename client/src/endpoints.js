@@ -1,6 +1,6 @@
-const base_url_dev = "http://localhost:5145";
+export const base_url_dev = "http://localhost:5145";
 const base_url_prod = "";
-const api_endpoints = {
+export const api_endpoints = {
     reserve: {
         base: "/reserve",
         id: "/reserve/{id}",
