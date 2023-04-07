@@ -7,6 +7,9 @@ export default function Nav()
                 <a href="/" className="text-white hover:text-gray-400">Logo</a>
             <ul className="flex items-center space-x-8">
                 <li>
+                <a href="/reserve" className="text-white hover:text-gray-400">Reservations</a>
+                </li>
+                <li>
                 <a href="/login" className="text-white hover:text-gray-400">Login</a>
                 </li>
                 <li>

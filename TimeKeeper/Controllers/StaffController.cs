@@ -70,6 +70,14 @@ public class StaffController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<Timing>> GetStaffDetails(string id)
     {
-        return Ok(_info.GetEmployeeInfo(id));
+        var user = await _info.GetEmployeeInfo(id);
+        return Ok(user);
+    }
+    
+    [HttpGet("active")]
+    public async Task<ActionResult<Timing>> GetNoActive()
+    {
+        var active = _info.GetNumActive();
+        return Ok(active);
     }
 }

@@ -65,7 +65,7 @@ public class UserController : Controller
         var userExists = await _user.FindByNameAsync(login.Username);
         if (userExists == null)
         {
-            return BadRequest();
+            return BadRequest("Cant find user");
         }
         var result = await _SignIn.PasswordSignInAsync(login.Username, login.Password, true, false);
         return Ok(result.Succeeded);

@@ -15,7 +15,7 @@ public class ReserveService : IReserveService
     }
     public async Task<List<Reserve>> GetAllReservations()
     {
-        var allGuests = await _ctx.Reservation.Where(t => t.Booking.Date.Equals(DateTime.UtcNow.Date)).ToListAsync();
+        var allGuests = await _ctx.Reservation.ToListAsync();
         return allGuests;
     }
 

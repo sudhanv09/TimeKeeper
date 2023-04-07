@@ -1,8 +1,8 @@
+import axios from "axios";
 import React from "react";
 
 function CheckInEvent(){
-    var timenow = new Date().toUTCString().replace("UTC", "GMT")
-    console.log(timenow)
+    var timenow = new Date().toISOString()
 }
 
 export default function Dashboard() {

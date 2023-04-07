@@ -50,7 +50,7 @@ public class InfoService : IInfoService
         // Update all fields
         mostRecentTiming.CheckOut = outDto.CheckOutTime;
         mostRecentTiming.IsWorking = false;
-        mostRecentTiming.TodaysHours = CalculateHours(outDto.Id, outDto.CheckOutTime).TotalHours;;
+        mostRecentTiming.TodaysHours = CalculateHours(outDto.Id, outDto.CheckOutTime).TotalHours;
         mostRecentTiming.TodaysEarnings = CalculateEverydayEarnings(outDto.Id, outDto.CheckOutTime);
         mostRecentTiming.TotalHoursWorked = TotalHours(outDto.Id, outDto.CheckOutTime);
         mostRecentTiming.TotalSalary = TotalEarnings(outDto.Id, outDto.CheckOutTime);
@@ -145,6 +145,12 @@ public class InfoService : IInfoService
     {
         var user = await _ctx.Timings.Where(i => i.EmployeeId == id).ToListAsync();
         return user;
+    }
+
+    public int GetNumActive()
+    {
+        var active = _ctx.Timings.Where(a => a.IsWorking).ToList().Count;
+        return active;
     }
 
     public async Task<bool> SaveChanges()

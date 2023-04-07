@@ -23,7 +23,10 @@ export default function Register() {
 
     axios
       .post("http://localhost:5145/user/create-user", {
-        username, email, password, schedule
+        username,
+        email,
+        password,
+        schedule,
       })
       .then((response) => console.log(response));
   };
@@ -40,9 +43,7 @@ export default function Register() {
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <aside
-          className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6"
-        >
+        <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt="Pattern"
             src="https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
@@ -70,9 +71,7 @@ export default function Register() {
               </svg>
             </a>
 
-            <h1
-              className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl"
-            >
+            <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
               Veer Jee's Portal
             </h1>
 
@@ -90,11 +89,16 @@ export default function Register() {
                   id="Username"
                   name="username"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="Email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="Email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email
                 </label>
 
@@ -103,6 +107,8 @@ export default function Register() {
                   id="Email"
                   name="email"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -119,6 +125,8 @@ export default function Register() {
                   id="Password"
                   name="password"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
@@ -139,15 +147,18 @@ export default function Register() {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button
-                  className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                onClick={postClick}
                 >
                   Create an account
                 </button>
-                
+
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                   Already have an account?
-                  <a href="#" className="text-gray-700 underline pl-2">Log in</a>.
+                  <a href="/login" className="text-gray-700 underline pl-2">
+                    Log in
+                  </a>
+                  .
                 </p>
               </div>
             </form>
@@ -155,6 +166,5 @@ export default function Register() {
         </main>
       </div>
     </section>
-
   );
 }

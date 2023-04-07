@@ -1,23 +1,21 @@
 export const base_url_dev = "http://localhost:5145";
-const base_url_prod = "";
 export const api_endpoints = {
     reserve: {
         base: "/reserve",
-        id: "/reserve/{id}",
         new: "/reserve/new",
-        update: "/reserve/update"
+        update: "/reserve/update",
     },
     staff: {
         checkin: "/staff/checkin",
         checkout: "/staff/checkout",
         schedule: "/staff/schedule",
         salary: "/staff/salary",
-        hours: "/staff/hours"
+        hours: "/staff/hours",
+        active: "/staff/active",
     },
     user: {
         new: "/user/create-user",
         login: "/user/login",
-        logout: "/user/logout"
+        logout: "/user/logout",
     }
 }
-

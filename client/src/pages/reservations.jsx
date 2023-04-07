@@ -14,41 +14,22 @@ export default function Reservations() {
     })();
   }, []);
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessor: "name",
-      },
-      {
-        Header: "Booking",
-        accessor: "booking",
-      },
-      {
-        Header: "Phone Number",
-        accessor: "phoneNumber",
-      },
-      {
-        Header: "Return Customer",
-        accessor: "returnCustomer",
-      },
-    ],
-    []
-  );
-
   return (
     <div>
       <div className="mt-8 flex justify-end pr-8">
         <button
           className="py-2 rounded-sm bg-violet-500 text-white text-lg font-bold p-5"
           type="submit"
-          onClick={()=>setShowModal(true)}
+          onClick={() => setShowModal(true)}
         >
           + Add
         </button>
       </div>
-      <AddReservation isVisible={showModal} onClose={() => setShowModal(false)}/>
-      <ReservationTable columns={columns} data={booking} />
+      <AddReservation
+        isVisible={showModal}
+        onClose={() => setShowModal(false)}
+      />
+      <ReservationTable data={booking} />
     </div>
   );
 }
