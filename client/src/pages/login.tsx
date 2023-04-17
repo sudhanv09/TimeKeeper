@@ -1,12 +1,12 @@
-import { useState, React } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { api_endpoints, base_url_dev } from "../endpoints";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ setTopUserState }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const reroute= useNavigate();
+  const reroute = useNavigate();
   const postClick = (e) => {
     e.preventDefault();
 
@@ -15,7 +15,8 @@ export default function Login() {
         username,
         password,
       })
-      .then(reroute("/", { replace: true }));
+      .then((response) => setTopUserState(response))
+      .then(() => { reroute("/user", { replace: true }) });
   };
 
   return (

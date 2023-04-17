@@ -68,7 +68,7 @@ public class UserController : Controller
             return BadRequest("Cant find user");
         }
         var result = await _SignIn.PasswordSignInAsync(login.Username, login.Password, true, false);
-        return Ok(result.Succeeded);
+        return Ok(new {result.Succeeded, userExists.Id });
     }
     
     [HttpPost]

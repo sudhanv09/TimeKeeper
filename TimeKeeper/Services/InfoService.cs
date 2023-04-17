@@ -62,7 +62,12 @@ public class InfoService : IInfoService
      */
     public TimeSpan CalculateHours(string id, DateTime time)
     {
+        /* Get item by Id and order by descending.
+         Since _ctx.SaveChangesAsync has not been reached yet, isWorking is still true
+         use that to find and update the field.
+         */
         var item = _ctx.Timings.Where(t => t.EmployeeId == id)
+            .OrderByDescending(o=>o.IsWorking)
             .Select(x => new
             {
                 checkintime = x.CheckIn,

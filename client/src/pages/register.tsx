@@ -1,12 +1,11 @@
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState<number[]>([]);
 
   const workSchedule = [
     { value: 0, name: "Sunday" },
@@ -34,7 +33,7 @@ export default function Register() {
   const selectSchedule = (e) => {
     const { value, checked } = e.target;
     if (checked) {
-      setSchedule((schedule) => [...schedule, parseInt(value)]);
+      setSchedule(() => [...schedule, parseInt(value)]);
     } else {
       setSchedule((schedule) => schedule.filter((e) => e !== value));
     }
@@ -148,7 +147,7 @@ export default function Register() {
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
-                onClick={postClick}
+                  onClick={postClick}
                 >
                   Create an account
                 </button>
