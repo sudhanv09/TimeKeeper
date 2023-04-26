@@ -11,17 +11,17 @@ import { useState } from "react";
 const App = () => {
   const [topUserState, setTopUserState] = useState({});
   return (
-    <>
+    <div className="text-white w-full h-screen bg-black">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/user" element={<Dashboard topUserState={topUserState}/>} />
+        <Route path="/:userid" element={<Dashboard topUserState={topUserState}/>} />
         <Route path="/login" element={<Login setTopUserState={setTopUserState}/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<Admin topUserState={topUserState}/>} />
         <Route path="/reserve" element={<Reservations />} />
       </Routes>
-    </>
+    </div>
   )
 }
 

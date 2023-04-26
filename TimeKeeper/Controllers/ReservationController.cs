@@ -8,8 +8,7 @@ namespace TimeKeeper.Controllers;
 [Route("/reserve")]
 public class ReservationController : Controller
 {
-    public IReserveService _rs { get; set; }
-
+    private IReserveService _rs { get; set; }
     public ReservationController(IReserveService rs)
     {
         _rs = rs;
@@ -28,6 +27,7 @@ public class ReservationController : Controller
         var getReservation = _rs.GetReservationById(id);
         return Ok(getReservation);
     }
+    
     [HttpPost("new")]
     public async Task<ActionResult<Reserve>> NewReservation(ReserveDTO dto)
     {

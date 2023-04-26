@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TimeKeeper.Models;
 using TimeKeeper.Models.DTO;
 using TimeKeeper.Services;
@@ -20,7 +19,7 @@ public class StaffController : Controller
     {
         if (ModelState.IsValid)
         {
-            _info.CheckIn(dto);
+            await _info.CheckIn(dto);
             return Ok();
         }
         return BadRequest();
@@ -31,7 +30,7 @@ public class StaffController : Controller
     {
         if (ModelState.IsValid)
         {
-            _info.CheckOut(dto);
+            await _info.CheckOut(dto);
             return Ok();
         }
         return BadRequest();
@@ -40,7 +39,7 @@ public class StaffController : Controller
     [HttpGet("schedule")]
     public async Task<ActionResult<Timing>> GetSchedule(string id)
     {
-        if (id != null)
+        if (string.IsNullOrEmpty(id))
         {
             return Ok(_info.GetSchedule(id));
         }
@@ -50,7 +49,7 @@ public class StaffController : Controller
     [HttpGet("salary")]
     public async Task<ActionResult<Timing>> GetSalary(string id)
     {
-        if (id != null)
+        if (string.IsNullOrEmpty(id))
         {
             return Ok(_info.GetTotalSalary(id));
         }
@@ -60,7 +59,7 @@ public class StaffController : Controller
     [HttpGet("hours")]
     public async Task<ActionResult<Timing>> GetHoursWorked(string id)
     {
-        if (id != null)
+        if (string.IsNullOrEmpty(id))
         {
             return Ok(_info.GetTotalHoursWorked(id));
         }

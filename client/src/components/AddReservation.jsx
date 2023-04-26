@@ -13,7 +13,6 @@ const AddReservation = ({ isVisible, onClose }) => {
   const [time, setTime] = useState("");
 
   const postOnClick = (e) => {
-   e.preventDefault(); 
    const bookingDate = new Date(`${date}T${time}`).toISOString();
    const id = ""; // empty id
    axios.post(base_url_dev+api_endpoints.reserve.new, {
@@ -37,7 +36,7 @@ const AddReservation = ({ isVisible, onClose }) => {
             <div className="relative">
               <input
                 type="text"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm text-black"
                 placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -48,7 +47,7 @@ const AddReservation = ({ isVisible, onClose }) => {
             <div className="relative">
               <input
                 type="tel"
-                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm text-black"
                 placeholder="Enter Phone Number"
                 pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 value={phoneNumber}
@@ -60,13 +59,13 @@ const AddReservation = ({ isVisible, onClose }) => {
             <div className="relative space-x-12">
               <input
                 type="date"
-                className="rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                className="rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm text-black"
                 value={date}
                 onChange={(e)=>setDate(e.target.value)}
               />
               <input
                 type="time"
-                className="rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
+                className="rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm text-black"
                 value={time}
                 onChange={(e)=>setTime(e.target.value)}
               />
