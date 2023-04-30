@@ -15,10 +15,10 @@ const App = () => {
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/:userid" element={<Dashboard topUserState={topUserState}/>} />
-        <Route path="/login" element={<Login setTopUserState={setTopUserState}/>} />
+        <Route path="user/:userid" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/admin" element={<Admin topUserState={topUserState}/>} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/reserve" element={<Reservations />} />
       </Routes>
     </div>

@@ -9,9 +9,6 @@ export default function Table({ columns, data }) {
   return (
     <div>
       <div className="px-4 pt-3 pb-4 mt-2 rounded-sm">
-        <strong className="text-white font-bold text-3xl mx-14">
-          Reservations
-        </strong>
         <div className="mt-4">
           <table
             {...getTableProps()}

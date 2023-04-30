@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect, React, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { api_endpoints, base_url_dev } from "../endpoints";
 import Table from "../components/Table";
 import AddReservation from "../components/AddReservation";
 
 export default function Reservations() {
   const [booking, setBooking] = useState([]);
-  const [showModal, setShowModal] = useState();
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     (async () => {
       const result = await axios(base_url_dev + api_endpoints.reserve.base);
@@ -93,6 +93,9 @@ export default function Reservations() {
         isVisible={showModal}
         onClose={() => setShowModal(false)}
       />
+      <strong className="text-white font-bold text-3xl mx-14">
+        Reservation
+      </strong>
       <Table columns={columns} data={booking} />
     </div>
   );

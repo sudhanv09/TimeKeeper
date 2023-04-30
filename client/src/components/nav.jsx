@@ -12,9 +12,6 @@ export default function Nav()
                 <li>
                 <a href="/login" className="text-gray-400 hover:text-gray-400">Login</a>
                 </li>
-                <li>
-                <a href="/register" className="text-gray-400 hover:text-gray-400">Register</a>
-                </li>
             </ul>
         </div>
         

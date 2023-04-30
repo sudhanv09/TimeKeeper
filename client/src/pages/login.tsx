@@ -2,21 +2,32 @@ import React, { useState } from "react";
 import axios from "axios";
 import { api_endpoints, base_url_dev } from "../endpoints";
 import { useNavigate } from "react-router-dom";
+import { useSignIn } from "react-auth-kit";
 
 export default function Login({ setTopUserState }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const reroute = useNavigate();
-  const postClick = (e) => {
-    e.preventDefault();
+  const signIn = useSignIn();
 
-    axios
-      .post(base_url_dev + api_endpoints.user.login, {
+  const postClick = async (e) => {
+    e.preventDefault();
+    const response = await axios.post(
+      base_url_dev + api_endpoints.user.login, {
         username,
         password,
       })
-      .then((response) => setTopUserState(response))
-      .then(() => { reroute("/user", { replace: true }) });
+
+      signIn({
+        token: response.data.id,
+        expiresIn: 7200,
+        tokenType: "Bearer",
+        authState: { username: username, 
+          id: response.data.id
+        }
+      })
+
+      reroute(`/user/${username}`, {replace: true});
   };
 
   return (
