@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState, useMemo } from "react";
-import { api_endpoints, base_url_dev } from "../endpoints";
+import { api_endpoints, base_url_dev } from "../lib/endpoints";
 import Table from "../components/Table";
 import AddReservation from "../components/AddReservation";
 

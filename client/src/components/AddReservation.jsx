@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import { api_endpoints, base_url_dev } from "../endpoints";
+import { api_endpoints, base_url_dev } from "../lib/endpoints";
 
 
 const AddReservation = ({ isVisible, onClose }) => {

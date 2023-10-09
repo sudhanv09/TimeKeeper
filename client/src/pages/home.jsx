@@ -29,7 +29,7 @@ export default function Home() {
         <a href="/login" role="button" className="btn btn-link">
           Login
         </a>
-        <a role="button" className="btn btn-active btn-primary">
+        <a href="/register" role="button" className="btn btn-active btn-primary">
           Register
         </a>
       </div>
