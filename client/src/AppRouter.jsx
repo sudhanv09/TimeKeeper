@@ -6,12 +6,11 @@ import Admin from "./pages/admin";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import Reservations from "./pages/reservations";
-import { useState } from "react";
+
 
 const App = () => {
-  const [topUserState, setTopUserState] = useState({});
   return (
-    <div className="text-white w-full h-screen bg-black">
+    <div className="bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r h-screen text-white">
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
