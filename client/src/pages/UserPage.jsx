@@ -1,19 +1,12 @@
 import React from "react";
-import useAuth from './AuthContext'
+import { useAuth } from "./AuthContext";
 
 export default function UserPage() {
+  const user  = useAuth();
   
-  const {
-    authUser,
-    setAuthUser,
-    isLoggedIn,
-    setIsLoggedIn,
-  } = useAuth();
-
   return (
     <div>
-      <h1>Hello</h1>
-      <h1>{authUser}</h1>
+      <h1>Hello {user.user.id}</h1>
     </div>
   );
 }

@@ -1,30 +1,20 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
-import { api_endpoints, base_url_dev } from "../lib/endpoints";
-import { useAuth } from "./AuthContext";
+
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const schedule = [0];
-  const signIn = useSignIn();
   const reroute = useNavigate();
-
-  const {
-    authUser,
-    setAuthUser,
-    isLoggedIn,
-    setIsLoggedIn,
-  } = useAuth();
 
   const postClick = async (e) => {
     e.preventDefault();
 
     const response = await axios.post(
-      base_url_dev + api_endpoints.user.register,
+      "http://localhost:5145/user/create-user",
       {
         username,
         email,
@@ -33,18 +23,10 @@ export default function Register() {
       }
     );
 
+    console.log(response);
+
     if (response.status === 200) {
-
-      setAuthUser(username);
-      setIsLoggedIn(true);
       
-      signIn({
-        token: response.data.id,
-        expiresIn: 7200,
-        tokenType: "Bearer",
-        authState: { username: username, id: response.data.id },
-      });
-
       reroute(`/user/${username}`, { replace: true });
     }
   };

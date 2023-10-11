@@ -11,8 +11,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInfoService, InfoService>();
 builder.Services.AddScoped<IReserveService, ReserveService>();
+
 builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(s=>
@@ -20,6 +22,7 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -32,6 +35,7 @@ builder.Services.Configure<IdentityOptions>(options =>
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = false;
 });
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();

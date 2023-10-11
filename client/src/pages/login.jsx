@@ -1,36 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { api_endpoints, base_url_dev } from "../lib/endpoints";
-import { useNavigate } from "react-router-dom";
-import { useSignIn } from "react-auth-kit";
 import { useAuth } from "./AuthContext";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { authUser, setAuthUser, isLoggedIn, setIsLoggedIn } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const reroute = useNavigate();
-  const signIn = useSignIn();
+  const { dispatch } = useAuth();
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post(base_url_dev + api_endpoints.user.login, {
+    const response = await axios.post("http://localhost:5145/user/login", {
       username,
       password,
     });
 
+
     if (response.status === 200) {
-      setAuthUser(username);
-      setIsLoggedIn(true);
-
-      signIn({
-        token: response.data.id,
-        expiresIn: 7200,
-        tokenType: "Bearer",
-        authState: { username, id: response.data.id },
-      });
-
+      localStorage.setItem("user", JSON.stringify({'name':username, 'id': response.data.id}));
+      dispatch({ type: "Login", payload: {'name':username, 'id': response.data.id} });
       reroute(`/user/${username}`, { replace: true });
     }
   };

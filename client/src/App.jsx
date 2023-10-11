@@ -1,16 +1,15 @@
 import React from "react";
 import Nav from "./components/nav";
 import AppRouter from "./AppRouter";
-import AuthProvider from "./pages/AuthContext";
-
+import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r h-screen text-white">
-      <AuthProvider>
-        <Nav />
+      <Nav />
+      <BrowserRouter>
         <AppRouter />
-      </AuthProvider>
+      </BrowserRouter>
     </div>
   );
 }
