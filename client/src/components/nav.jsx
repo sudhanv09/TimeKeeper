@@ -14,6 +14,7 @@ export default function Nav() {
       dispatch({ type: "Logout" });
     }
   };
+  
   return (
     <div className="h-14 flex items-center justify-between px-16 text-md font-bold">
       <a href="/" className="text-white">
@@ -29,7 +30,7 @@ export default function Nav() {
         )}
         {user && (
           <div className="space-x-4">
-            <span>Welcome {user.name}</span>
+            <a href={`/user/${user.name}`}>Welcome {user.name}</a>
             <button onClick={handleClick}>Logout</button>
           </div>
         )}

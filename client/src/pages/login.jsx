@@ -16,7 +16,6 @@ export default function Login() {
       password,
     });
 
-
     if (response.status === 200) {
       localStorage.setItem("user", JSON.stringify({'name':username, 'id': response.data.id}));
       dispatch({ type: "Login", payload: {'name':username, 'id': response.data.id} });

@@ -3,7 +3,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Admin from "./pages/admin";
 import Register from "./pages/register";
-import Reservations from "./pages/reservations";
+// import Reservations from "./pages/reservations";
 import UserPage from "./pages/UserPage";
 
 const AppRouter = () => {

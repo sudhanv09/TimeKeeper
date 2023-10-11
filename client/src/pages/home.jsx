@@ -26,7 +26,7 @@ export default function Home() {
       </div>
 
       <div className="space-x-8 mt-8">
-        <a href="/login" role="button" className="btn btn-link">
+        <a href="/login" role="button" className="btn btn-active btn-primary">
           Login
         </a>
         <a href="/register" role="button" className="btn btn-active btn-primary">
