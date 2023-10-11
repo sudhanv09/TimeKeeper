@@ -14,7 +14,7 @@ const AppRouter = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/admin" element={<Admin />} />
-      <Route path="/reserve" element={<Reservations />} />
+      {/* <Route path="/reserve" element={<Reservations />} /> */}
     </Routes>
   );
 };

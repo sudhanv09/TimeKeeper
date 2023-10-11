@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState, useMemo } from "react";
-import { api_endpoints, base_url_dev } from "../lib/endpoints";
 import Table from "../components/Table";
 import AddReservation from "../components/AddReservation";
 
@@ -9,7 +8,7 @@ export default function Reservations() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     (async () => {
-      const result = await axios(base_url_dev + api_endpoints.reserve.base);
+      const result = await axios("http://localhost:5145/reserve");
       setBooking(result.data);
     })();
   }, []);

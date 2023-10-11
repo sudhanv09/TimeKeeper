@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import { api_endpoints, base_url_dev } from "../lib/endpoints";
-
 
 const AddReservation = ({ isVisible, onClose }) => {
   if (!isVisible) return null;
@@ -15,7 +13,7 @@ const AddReservation = ({ isVisible, onClose }) => {
   const postOnClick = (e) => {
    const bookingDate = new Date(`${date}T${time}`).toISOString();
    const id = ""; // empty id
-   axios.post(base_url_dev+api_endpoints.reserve.new, {
+   axios.post("http://localhost:514/reserve/new", {
     id, name, bookingDate, phoneNumber
    })
 .then((response) => console.log(response));

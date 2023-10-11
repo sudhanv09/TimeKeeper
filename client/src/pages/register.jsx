@@ -26,8 +26,7 @@ export default function Register() {
     console.log(response);
 
     if (response.status === 200) {
-      
-      reroute(`/user/${username}`, { replace: true });
+      reroute(`/login`, { replace: true });
     }
   };
 
