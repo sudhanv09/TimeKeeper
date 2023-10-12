@@ -1,15 +1,15 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<script>
+	const currDate = new Date()
+	$: timeNow = currDate.toLocaleTimeString()
+</script>
 
-<div class="container h-full mx-auto flex justify-center items-center">
-	<div class="space-y-5">
-		<h1 class="h1">Let's get cracking bones!</h1>
-		<p>Start by exploring:</p>
-		<ul>
-			<li><code class="code">/src/routes/+layout.svelte</code> - barebones layout</li>
-			<li><code class="code">/src/app.postcss</code> - app wide css</li>
-			<li>
-				<code class="code">/src/routes/+page.svelte</code> - this page, you can replace the contents
-			</li>
-		</ul>
+<div class="flex flex-col space-y-10 h-screen justify-center items-center">
+	<div class="space-y-4">
+		<h1 class="text-5xl">{timeNow}</h1>
+		<h1 class="text-center">{currDate.toLocaleDateString("en-US", {weekday: "long"}) + "," + currDate.toLocaleDateString()}</h1>
+	</div>
+	<div class="space-x-6">
+		<a href="/login" class="btn variant-filled" data-sveltekit-preload-data="hover">Login</a>
+		<a href="/register" class="btn variant-filled" data-sveltekit-preload-data="hover">Register</a>
 	</div>
 </div>
