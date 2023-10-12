@@ -20,8 +20,8 @@ export const authReducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
-    userId: null,
-    userName: null,
+    id: null,
+    name: null,
   });
 
   useEffect(() => {

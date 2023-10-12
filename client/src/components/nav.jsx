@@ -30,7 +30,7 @@ export default function Nav() {
         )}
         {user && (
           <div className="space-x-4">
-            <a href={`/user/${user.name}`}>Welcome {user.name}</a>
+            <a href={`/user/${user.id}`}>Welcome {user.name}</a>
             <button onClick={handleClick}>Logout</button>
           </div>
         )}

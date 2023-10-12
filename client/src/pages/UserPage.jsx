@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
-import { useAuth } from "./AuthContext";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Table from "../components/Table";
 
 export default function UserPage() {
-  const { user } = useAuth();
-  console.log(user);
+  const userId = window.location.href.split("/").pop();
+  const [userData, setUserData] = useState({});
+
+  console.log(userData);
 
   const handleCheckin = async () => {
     const checkInTime = new Date().toISOString();
-    const userId = user.user.id;
 
     await axios.post("http://localhost:5145/staff/checkin", {
       userId,
@@ -18,7 +19,7 @@ export default function UserPage() {
 
   const handleCheckOut = async () => {
     const checkOutTime = new Date().toISOString();
-    const userId = user.user.id;
+    // const userId = user.user.id;
 
     await axios.post("http://localhost:5145/staff/checkin", {
       userId,
@@ -26,11 +27,11 @@ export default function UserPage() {
     });
   };
 
-  // useEffect(() => {
-  //   axios.get(`http://localhost:5145/staff/${user.user.id}`, {
-
-  //   })
-  // }, [])
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5145/staff/${userId}`)
+      .then(data => setUserData(data.data));
+  }, []);
 
   return (
     <div>
@@ -53,14 +54,15 @@ export default function UserPage() {
               </button>
             </div>
           </div>
-          <div>
-            <h3>User Earnings: </h3>
-            <h3>Hours Worked: </h3>
-          </div>
+          {userData && <div>
+            <h3>User Earnings: {userData.at(-1).totalSalary}</h3>
+            <h3>Hours Worked: {userData.at(-1).totalHoursWorked}</h3>
+          </div>}
         </div>
         <div>Heatmap</div>
       </div>
       {/* User timings Table */}
+      <div>{/* <Table /> */}</div>
     </div>
   );
 }
