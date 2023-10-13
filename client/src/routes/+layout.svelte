@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { user } from '$lib/store';
+	import { AppShell } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
@@ -8,11 +9,14 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
-<div class="bg-gradient-to-r from-gray-700 via-gray-900 to-black h-screen">
-	<div class="flex p-6 text-xl font-semibold">
-		<a href="/">Home</a>
-		<h1>Welcome {$user.name}</h1>
-	</div>
+<AppShell>
+	<svelte:fragment slot="header">
+		<div class="flex justify-between p-6 text-xl font-semibold">
+			<a href="/">Home</a>
+			<a href={`/user/${$user.id}`}>Welcome {$user.name}</a>
+		</div>
+	</svelte:fragment>
 
 	<slot />
-</div>
+
+</AppShell>
