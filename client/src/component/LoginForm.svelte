@@ -17,7 +17,7 @@
 		});
 
 		const data = await response.json();
-		user.update(prev => ({...prev, name: username, id: data.id}))
+		user.set({name: username, id: data.id})
 
 		goto(`/user/${data.id}`)
 	}

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	export let data: PageData;
+	import CheckIn from '../../../component/CheckIn.svelte';
+	import CheckOut from '../../../component/CheckOut.svelte';
 
+	export let data: PageData;	
+
+	const active = data.userTime.at(-1)?.isWorking
     const totalSalary = data.userTime.at(-1)?.totalSalary
     const totalHours = data.userTime.at(-1)?.totalHoursWorked
 </script>
@@ -11,8 +15,8 @@
 		<div class="space-y-16">
 			<h1 class="text-semi-bold text-4xl text-center">Username</h1>
 			<div class="space-x-8">
-				<button class="btn variant-filled-primary"> Check-In </button>
-				<button class="btn variant-filled-primary"> Check-Out </button>
+				<CheckIn active={active || false}/>
+				<CheckOut active={active || false}/>
 			</div>
 		</div>
 		<div class="space-y-6">
