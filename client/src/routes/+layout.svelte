@@ -1,8 +1,11 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { user } from '$lib/store';
-	import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppShell, Toast } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
+
+	import {initializeStores} from '@skeletonlabs/skeleton';
+	initializeStores();
 
 	async function handleLogout() {
 		const response = await fetch('http://localhost:5145/user/logout');
@@ -10,6 +13,8 @@
 		goto('/', { replaceState: true });
 	}
 </script>
+
+<Toast />
 
 <AppShell>
 	<svelte:fragment slot="header">

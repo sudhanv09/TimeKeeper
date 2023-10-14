@@ -2,24 +2,25 @@
 	import type { PageData } from './$types';
 	import CheckIn from '../../../component/CheckIn.svelte';
 	import CheckOut from '../../../component/CheckOut.svelte';
-	import Matrix from '../../../component/Matrix.svelte';
+	import { user } from '$lib/store';
+	// import Matrix from '../../../component/Matrix.svelte';
 
 	export let data: PageData;	
 
-	const active = data.userTime.at(-1)?.isWorking
     const totalSalary = data.userTime.at(-1)?.totalSalary
-    const totalHours = data.userTime.at(-1)?.totalHoursWorked
+    const totalHours = data.userTime.at(-1)?.totalHoursWorked.toPrecision(3)
 </script>
 
 <div class="h-1/4 flex justify-between p-8">
 	<div class="flex flex-row justify-between w-1/3">
 		<div class="space-y-16">
-			<h1 class="text-semi-bold text-4xl text-center">Username</h1>
+			<h1 class="text-semi-bold text-4xl text-center">{$user.name}</h1>
 			<div class="space-x-8">
-				<CheckIn active={active || false}/>
-				<CheckOut active={active || false}/>
+				<CheckIn />
+				<CheckOut />
 			</div>
 		</div>
+		
 		<div class="space-y-6">
 			<h3>User Total Earnings: {totalSalary}</h3>
 			<h3>Total Hours Worked: {totalHours}</h3>

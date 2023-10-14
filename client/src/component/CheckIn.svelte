@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	export let active: boolean;
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+
+	const toastStore = getToastStore();
 
 	const id = $page.params.slug;
 	const currTime = new Date().toISOString();
@@ -12,11 +14,14 @@
 			},
 			body: JSON.stringify({ id, currTime })
 		});
+		if (response.ok) {
+			const t: ToastSettings = {
+				message: 'Check-In Successful',
+				background: 'variant-filled-success'
+			};
+			toastStore.trigger(t);
+		}
 	}
 </script>
 
-{#if active}
-	<button class="btn variant-filled-primary disabled:opacity-50 disabled:cursor-not-allowed" on:click={handleCheckin}> Check-In </button>
-{:else}
-	<button class="btn variant-filled-primary" on:click={handleCheckin}> Check-In </button>
-{/if}
+<button class="btn variant-filled-primary" on:click={handleCheckin}> Check-In </button>
