@@ -3,7 +3,8 @@
 	import CheckIn from '../../../component/CheckIn.svelte';
 	import CheckOut from '../../../component/CheckOut.svelte';
 	import { user } from '$lib/store';
-	// import Matrix from '../../../component/Matrix.svelte';
+	import Bar from '../../../component/Bar.svelte';
+	import Matrix from '../../../component/Matrix.svelte';
 
 	export let data: PageData;	
 
@@ -26,9 +27,9 @@
 			<h3>Total Hours Worked: {totalHours}</h3>
 		</div>
 	</div>
-	<!-- <div>
-		<Matrix />
-	</div> -->
+	<div>
+		<Matrix checkinData={data.userTime}/>
+	</div>
 </div>
 
 

@@ -1,23 +1,29 @@
 <script lang="ts">
-	import { data, options } from '$lib/data';
-	import { browser } from '$app/environment';
-	import { Chart, type ChartItem, TimeScale } from 'chart.js';
+	import { onMount } from 'svelte';
+	import { Chart } from 'chart.js/auto';
+	import { data, options, setup } from '$lib/data';
+	import 'chartjs-adapter-date-fns';
 	import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
-    import 'chartjs-adapter-date-fns';
+	import type { UserTimings } from '$lib/types';
 
-	Chart.register(MatrixController, MatrixElement, TimeScale);
+	export let checkinData: UserTimings[];
+	let userData, userOptions = setup(checkinData);
 
-	if (browser) {
-		const ctx = browser && (document.getElementById('checkin') as ChartItem);
+	Chart.register(MatrixController, MatrixElement);
 
-		const chart = new Chart(ctx, {
-			type: 'matrix',
-			data: data,
-			options: options
-		} as any);
-	}
+	let portfolio: any;
+	const config = {
+		type: 'matrix',
+		data: data,
+		options: options
+	} as any;
+
+	onMount(() => {
+		const ctx = portfolio.getContext('2d');
+		var myChart = new Chart(ctx, config);
+	});
 </script>
 
-<div>
-	<canvas id="checkin" />
+<div class="">
+	<canvas bind:this={portfolio} width="1000" height="400" />
 </div>

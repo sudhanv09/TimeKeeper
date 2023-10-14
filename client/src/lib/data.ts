@@ -1,3 +1,5 @@
+import type { UserTimings } from './types';
+
 function dayOfWeek(date: Date) {
 	let weekday = date.getDay();
 	weekday = ((weekday + 6) % 7) + 1;
@@ -15,18 +17,19 @@ export function genData() {
 	const d = new Date();
 	const today = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0);
 	const end = today;
-	let dt = new Date(new Date().setDate(end.getDate() - 365));
+	let dt = new Date(new Date().setDate(end.getDate() - 180));
 
 	let data: TimingDate[] = [];
 
 	while (dt <= end) {
 		const iso = dt.toISOString().substring(0, 10);
-		data.push({
-			x: iso,
-			y: dayOfWeek(dt),
-			d: iso,
-			v: Math.random().toString()
-		});
+			data.push({
+				x: iso,
+				y: dayOfWeek(dt),
+				d: iso,
+				v: '0'
+			});
+
 		dt = new Date(dt.setDate(dt.getDate() + 1));
 	}
 	return data;
@@ -59,7 +62,7 @@ export const data = {
 	]
 };
 
-export const scales = {
+const scales = {
 	y: {
 		type: 'time',
 		offset: true,
@@ -73,13 +76,13 @@ export const scales = {
 			}
 		},
 		reverse: true,
-		position: 'right',
+		position: 'left',
 		ticks: {
 			maxRotation: 0,
 			autoSkip: true,
 			padding: 1,
 			font: {
-				size: 9
+				size: 12
 			}
 		},
 		grid: {
@@ -104,7 +107,7 @@ export const scales = {
 			maxRotation: 0,
 			autoSkip: true,
 			font: {
-				size: 9
+				size: 12
 			}
 		},
 		grid: {
@@ -120,15 +123,15 @@ export const options = {
 	plugins: {
 		legend: false,
 		tooltip: {
-		  callbacks: {
-			title() {
-			  return "";
-			},
-			label(context) {
-			  const v = context.dataset.data[context.dataIndex];
-			  return ["x: " + v.x, "y: " + v.y, "v: " + v.v];
+			callbacks: {
+				title() {
+					return '';
+				},
+				label(context) {
+					const v = context.dataset.data[context.dataIndex];
+					return ['x: ' + v.x, 'y: ' + v.y, 'v: ' + v.v];
+				}
 			}
-		  }
 		}
 	},
 	scales: scales,
