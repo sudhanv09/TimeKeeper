@@ -3,7 +3,6 @@
 	import CheckIn from '../../../component/CheckIn.svelte';
 	import CheckOut from '../../../component/CheckOut.svelte';
 	import { user } from '$lib/store';
-	import Bar from '../../../component/Bar.svelte';
 	import Matrix from '../../../component/Matrix.svelte';
 
 	export let data: PageData;	
