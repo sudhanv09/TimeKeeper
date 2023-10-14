@@ -38,6 +38,9 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.5.3",
-    "chartjs-chart-matrix": "^2.0.1"
+    "chart.js": "^4.4.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-chart-matrix": "^2.0.1",
+    "date-fns": "^2.30.0"
   }
 }

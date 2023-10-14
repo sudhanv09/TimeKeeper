@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import CheckIn from '../../../component/CheckIn.svelte';
 	import CheckOut from '../../../component/CheckOut.svelte';
+	import Matrix from '../../../component/Matrix.svelte';
 
 	export let data: PageData;	
 
@@ -24,7 +25,9 @@
 			<h3>Total Hours Worked: {totalHours}</h3>
 		</div>
 	</div>
-	<div>Heatmap</div>
+	<!-- <div>
+		<Matrix />
+	</div> -->
 </div>
 
 
