@@ -49,8 +49,8 @@
 			{#each data.userTime as row, i}
 				<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 					<td class="px-6 py-4">{new Date(row.checkIn).toLocaleDateString()}</td>
-					<td class="px-6 py-4">{row.checkIn}</td>
-					<td class="px-6 py-4">{row.checkOut}</td>
+					<td class="px-6 py-4">{new Date(row.checkIn).toLocaleTimeString()}</td>
+					<td class="px-6 py-4">{new Date(row.checkOut).toLocaleTimeString()}</td>
 					<td class="px-6 py-4">{row.todaysHours.toPrecision(3)}</td>
 					<td class="px-6 py-4">{row.todaysEarnings}</td>
 				</tr>

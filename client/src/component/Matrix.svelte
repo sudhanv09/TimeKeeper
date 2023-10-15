@@ -19,8 +19,6 @@
 				backgroundColor: function (c) {
 					const value = c.dataset.data[c.dataIndex].v;			
 					const alpha = value * 20 / 60;			
-					console.log(alpha);
-							
 					return `rgba(0, 255, 0, ${alpha})`;
 				},
 				borderColor: 'green',
