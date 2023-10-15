@@ -9,11 +9,11 @@ Example:
 
 Dashboard:
 
-![dashboard][./assets/dashboard.png]
+![dashboard](./assets/dashboard.png)
 
 Login Page:
 
-![login][./assets/login.png]
+![login](./assets/login.png)
 
 
 
