@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeKeeper.Models;
 using TimeKeeper.Models.DTO;
@@ -6,6 +7,7 @@ using TimeKeeper.Services;
 namespace TimeKeeper.Controllers;
 [ApiController]
 [Route("/reserve")]
+[Authorize]
 public class ReservationController : Controller
 {
     private IReserveService _rs { get; set; }
@@ -15,37 +17,47 @@ public class ReservationController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<Reserve>> GetReservations()
+    public async Task<IResult> GetReservations()
     {
         var allGuests = await _rs.GetAllReservations();
-        return Ok(allGuests);
+        return Results.Ok(allGuests);
     }
     
     [HttpGet("{id}")]
-    public ActionResult<Reserve> GetReservationById(string id)
+    public IResult GetReservationById(string id)
     {
-        var getReservation = _rs.GetReservationById(id);
-        return Ok(getReservation);
+        bool isValid = Guid.TryParse(id, out Guid guid);
+        if (!isValid) return Results.BadRequest("Bad Id");
+        
+        var getReservation = _rs.GetReservationById(guid);
+        return getReservation is null ? Results.NotFound() : Results.Ok(getReservation);
     }
     
     [HttpPost("new")]
-    public async Task<ActionResult<Reserve>> NewReservation(ReserveDTO dto)
+    public async Task<IResult> NewReservation([FromBody]ReserveDTO dto)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
+        if (!ModelState.IsValid) return Results.BadRequest();
+        
         await _rs.NewReservation(dto);
-        return Ok("Created new reservation");
+        return Results.Created();
     }
+    
      [HttpPatch("update")]
-     public async Task<ActionResult<Reserve>> UpdateReservation(ReserveDTO dto)
+     public async Task<IResult> UpdateReservation(ReserveDTO dto)
      {
-         if (!ModelState.IsValid)
-         {
-             return BadRequest();
-         }
+         if (!ModelState.IsValid) return Results.BadRequest();
+         
          await _rs.UpdateReservation(dto);
-         return Ok("Reservation Updated");
+         return Results.Ok("Reservation Updated");
     }
+     
+     [HttpPost("delete")]
+     public async Task<IResult> DeleteReservation(string Id)
+     {
+         bool isValid = Guid.TryParse(Id, out Guid guid);
+         if (!isValid) return Results.BadRequest("Bad Id");
+         
+         await _rs.DeleteReservation(guid);
+         return Results.Ok("Reservation Updated");
+     }
 }

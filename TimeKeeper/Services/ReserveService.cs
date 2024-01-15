@@ -19,20 +19,9 @@ public class ReserveService : IReserveService
         return allGuests;
     }
 
-    public Reserve GetReservationById(string id)
+    public Reserve GetReservationById(Guid id)
     {
-        Reserve reservation = null;
-        if (Guid.TryParse(id, out Guid reservationId))
-        {
-            try
-            {
-                reservation = _ctx.Reservation.FirstOrDefault(r => r.Id == reservationId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error getting reservation with id {id}: {ex.Message}");
-            }
-        }
+        var reservation = _ctx.Reservation.FirstOrDefault(r => r.Id == id);
         return reservation;
     }
     
@@ -56,11 +45,20 @@ public class ReserveService : IReserveService
 
     public async Task UpdateReservation(ReserveDTO dto)
     {
-        var guest = GetReservationById(dto.Id);
+        var isValid = Guid.TryParse(dto.Id, out Guid guid);
+        var guest = GetReservationById(guid);
         if (guest == null) throw new Exception("Guest not found");
         
         // No one updates Name and phone number, only datetime
         guest.Booking = dto.BookingDate;
+        await _ctx.SaveChangesAsync();
+    }
+
+    public async Task DeleteReservation(Guid Id)
+    {
+        var reserve = GetReservationById(Id);
+
+        _ctx.Remove(reserve);
         await _ctx.SaveChangesAsync();
     }
 }

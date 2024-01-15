@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeKeeper.Models;
 using TimeKeeper.Models.DTO;
@@ -6,6 +7,7 @@ using TimeKeeper.Services;
 namespace TimeKeeper.Controllers;
 [ApiController]
 [Route("/staff")]
+[Authorize]
 public class StaffController : Controller
 {
     private IInfoService _info { get; set; }
@@ -15,68 +17,59 @@ public class StaffController : Controller
     }
 
     [HttpPost("checkin")]
-    public async Task<ActionResult<Timing>> Checkin(CheckInDTO dto)
+    public async Task<IResult> Checkin([FromBody]CheckInDTO dto)
     {
-        if (ModelState.IsValid)
-        {
-            await _info.CheckIn(dto);
-            return Ok();
-        }
-        return BadRequest();
+        if (!ModelState.IsValid) return Results.BadRequest();
+        
+        await _info.CheckIn(dto);
+        return Results.Ok();
     }
     
     [HttpPost("checkout")]
-    public async Task<ActionResult<Timing>> Checkout(CheckOutDTO dto)
+    public async Task<IResult> Checkout([FromBody]CheckOutDTO dto)
     {
-        if (ModelState.IsValid)
-        {
-            await _info.CheckOut(dto);
-            return Ok();
-        }
-        return BadRequest();
+        if (!ModelState.IsValid) return Results.BadRequest();
+        await _info.CheckOut(dto);
+        return Results.Ok();
     }
     
     [HttpGet("schedule")]
-    public async Task<ActionResult<Timing>> GetSchedule(string id)
+    public async Task<IResult> GetSchedule(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
-            return Ok(_info.GetSchedule(id));
+            return Results.BadRequest();
         }
-        return BadRequest();
+
+        var timings = _info.GetSchedule(id);
+        return Results.Ok(timings);
     }
     
     [HttpGet("salary")]
-    public async Task<ActionResult<Timing>> GetSalary(string id)
+    public async Task<IResult> GetSalary(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
-            return Ok(_info.GetTotalSalary(id));
+            return Results.BadRequest();
         }
-        return BadRequest();
+        return Results.Ok(_info.GetTotalSalary(id));
     }
     
     [HttpGet("hours")]
-    public async Task<ActionResult<Timing>> GetHoursWorked(string id)
+    public async Task<IResult> GetHoursWorked(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
-            return Ok(_info.GetTotalHoursWorked(id));
+            return Results.BadRequest();    
         }
-        return BadRequest();
+        return Results.Ok(_info.GetTotalHoursWorked(id));
+        
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Timing>> GetStaffDetails(string id)
+    public async Task<IResult> GetStaffDetails(string id)
     {
         var user = await _info.GetEmployeeInfo(id);
-        return Ok(user);
-    }
-    
-    [HttpGet("active")]
-    public async Task<ActionResult<Timing>> GetNoActive()
-    {
-        var active = _info.GetNumActive();
-        return Ok(active);
+        return Results.Ok(user);
     }
 }

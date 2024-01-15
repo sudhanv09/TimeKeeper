@@ -8,7 +8,6 @@ namespace TimeKeeper.Services;
 public class InfoService : IInfoService
 {
     private AppDbContext _ctx { get; set; }
-
     public InfoService(AppDbContext ctx)
     {
         _ctx = ctx;
@@ -150,21 +149,5 @@ public class InfoService : IInfoService
     {
         var user = await _ctx.Timings.Where(i => i.EmployeeId == id).ToListAsync();
         return user;
-    }
-
-    public int GetNumActive()
-    {
-        var active = _ctx.Timings.Where(a => a.IsWorking).ToList().Count;
-        return active;
-    }
-
-    public async Task<bool> SaveChanges()
-    {
-        if (await _ctx.SaveChangesAsync() > 0)
-            return true;
-        else
-        {
-            return false;
-        }
     }
 }

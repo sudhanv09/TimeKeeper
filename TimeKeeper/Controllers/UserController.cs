@@ -11,72 +11,65 @@ namespace TimeKeeper.Controllers;
 
 [ApiController]
 [Route("/user")]
-[ActivatorUtilitiesConstructor]
 public class UserController : Controller
 {
     private IInfoService _info { get; set; }
     private UserManager<Employee> _user { get; set; }
-    public SignInManager<Employee> _SignIn { get; set; }
+    private SignInManager<Employee> _signIn { get; set; }
 
     public UserController(IInfoService info, UserManager<Employee> user, SignInManager<Employee> signIn)
     {
         _info = info;
         _user = user;
-        _SignIn = signIn;
+        _signIn = signIn;
     }
 
-    [HttpPost("create-user")]
-    public async Task<ActionResult<IdentityUser>> CreateUser(StaffDTO staff)
+    [HttpPost("register")]
+    public async Task<IResult> CreateUser([FromBody] StaffDTO staff)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid) return Results.BadRequest("Input not valid");
+        var user = new Employee()
         {
-            var user = new Employee()
+            UserName = staff.Username,
+            NormalizedUserName = staff.Username.ToUpper(),
+            Email = staff.Email,
+            Schedule = staff.Schedule
+        };
+        
+        var result = await _user.CreateAsync(user, staff.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var err in result.Errors)
             {
-                UserName = staff.Username,
-                NormalizedUserName = staff.Username.ToUpper(),
-                Email = staff.Email,
-                Schedule = staff.Schedule
-            };
-            var result = await _user.CreateAsync(user, staff.Password);
-            if (result.Succeeded)
-            {
-                return Ok(user);
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-                return BadRequest(result.Errors);
+                return Results.BadRequest(err.Description);
             }
         }
-        return BadRequest("Input not valid");
+        return Results.Created();
+        
     }
     
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login(LoginDTO login)
+    public async Task<IResult> Login(LoginDTO login)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();        
-        }
+        if (!ModelState.IsValid) return Results.BadRequest();        
+        
         var userExists = await _user.FindByNameAsync(login.Username);
         if (userExists == null)
         {
-            return BadRequest("Cant find user");
+            return Results.NotFound("Cant find user");
         }
-        var result = await _SignIn.PasswordSignInAsync(login.Username, login.Password, true, false);
-        return Ok(new {result.Succeeded, userExists.Id });
+        var result = await _signIn.PasswordSignInAsync(login.Username, login.Password, true, false);
+        if (!result.Succeeded) return Results.Unauthorized();
+        
+        return Results.Ok();
     }
     
     [HttpPost]
     [Route("logout")]
-    public async Task<IActionResult> Logout()
+    public async Task<IResult> Logout()
     {
-        await _SignIn.SignOutAsync();
-        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        return Ok("User Logged Out");
+        await _signIn.SignOutAsync();
+        return Results.SignOut();
     }
 }

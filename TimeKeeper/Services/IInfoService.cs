@@ -21,8 +21,6 @@ public interface IInfoService
     int GetTotalSalary(string id);
     double GetTotalHoursWorked(string id);
     Task<List<Timing>> GetEmployeeInfo(string id);
-    int GetNumActive();
-
-    // Helper
-    Task<bool> SaveChanges();
+    
+    
 }
