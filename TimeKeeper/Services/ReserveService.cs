@@ -5,14 +5,10 @@ using TimeKeeper.Models.DTO;
 
 namespace TimeKeeper.Services;
 
-public class ReserveService : IReserveService
+public class ReserveService(AppDbContext ctx) : IReserveService
 {
-    public AppDbContext _ctx { get; set; }
+    private AppDbContext _ctx { get; set; } = ctx;
 
-    public ReserveService(AppDbContext ctx)
-    {
-        _ctx = ctx;
-    }
     public async Task<List<Reserve>> GetAllReservations()
     {
         var allGuests = await _ctx.Reservation.ToListAsync();
@@ -56,9 +52,9 @@ public class ReserveService : IReserveService
         await _ctx.SaveChangesAsync();
     }
 
-    public async Task DeleteReservation(Guid Id)
+    public async Task DeleteReservation(Guid id)
     {
-        var reserve = GetReservationById(Id);
+        var reserve = GetReservationById(id);
 
         _ctx.Remove(reserve);
         await _ctx.SaveChangesAsync();

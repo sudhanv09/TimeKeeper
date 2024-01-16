@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 using TimeKeeper.Data;
+using TimeKeeper.Models;
 
 namespace TimeKeeper.Tests;
 
@@ -44,12 +45,19 @@ public class TimeKeeperFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await _postgre.StartAsync();
         using var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
         await dbContext.Database.MigrateAsync();
+
+        // Seed
+        dbContext.Employees.Add(new Employee()
+        {
+            Id = "0cd94927-c075-43c7-834f-6fa854e94d32"
+        });
+        await dbContext.SaveChangesAsync();
     }
 
     public new Task DisposeAsync()
     {
         return _postgre.StopAsync();
     }
+    
 }

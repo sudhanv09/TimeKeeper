@@ -23,10 +23,4 @@ public class ReservationTest(TimeKeeperFactory factory) : BaseTest(factory)
         var query = _dbContext.Reservation.FirstOrDefault(i => i.Id == reserveId);
         Assert.NotNull(query);
     }
-    
-    [Fact]
-    public async Task NewReservation_ReturnsBadRequest()
-    {
-        
-    }
 }

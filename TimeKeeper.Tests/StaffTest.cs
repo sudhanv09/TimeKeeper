@@ -3,19 +3,8 @@ using TimeKeeper.Models.DTO;
 
 namespace TimeKeeper.Tests;
 
-public class StaffTest : BaseTest
+public class StaffTest(TimeKeeperFactory factory) : BaseTest(factory)
 {
-    public StaffTest(TimeKeeperFactory factory) : base(factory)
-    {
-        var user = new Employee()
-        {
-            Id = "0cd94927-c075-43c7-834f-6fa854e94d32"
-        };
-
-        _dbContext.Employees.Add(user);
-        _dbContext.SaveChanges();   
-    }
-
     [Fact]
     public async Task Staff_ShouldCheckin()
     {

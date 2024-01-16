@@ -39,10 +39,11 @@ public class InfoService : IInfoService
             .OrderByDescending(t => t.CheckIn)
             .FirstOrDefault();
 
-        if (mostRecentTiming == null)
+        if (mostRecentTiming is null)
         {
             throw new ArgumentException("Employee has no active timing entries");
         }
+        
         // Update all fields
         mostRecentTiming.CheckOut = outDto.CheckOutTime;
         mostRecentTiming.IsWorking = false;
@@ -82,7 +83,7 @@ public class InfoService : IInfoService
         var hours = CalculateHours(id, time);
         var earnings = hours.TotalHours * 178;
 
-        return (int)earnings;
+        return (int)Math.Round(earnings);
     }
 
     /* Calculate overall hours worked
