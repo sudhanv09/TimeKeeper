@@ -7,14 +7,10 @@ using TimeKeeper.Services;
 namespace TimeKeeper.Controllers;
 [ApiController]
 [Route("/reserve")]
-[Authorize]
-public class ReservationController : Controller
+// [Authorize]
+public class ReservationController(IReserveService rs) : Controller
 {
-    private IReserveService _rs { get; set; }
-    public ReservationController(IReserveService rs)
-    {
-        _rs = rs;
-    }
+    private IReserveService _rs { get; set; } = rs;
 
     [HttpGet]
     public async Task<IResult> GetReservations()

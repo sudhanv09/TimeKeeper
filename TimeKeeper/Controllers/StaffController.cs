@@ -7,7 +7,7 @@ using TimeKeeper.Services;
 namespace TimeKeeper.Controllers;
 [ApiController]
 [Route("/staff")]
-[Authorize]
+// [Authorize]
 public class StaffController : Controller
 {
     private IInfoService _info { get; set; }

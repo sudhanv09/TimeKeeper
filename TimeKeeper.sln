@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeKeeper", "TimeKeeper\TimeKeeper.csproj", "{5BC8E2C3-1305-4464-979A-F04CF3E1C97E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeKeeper.Tests", "TimeKeeper.Tests\TimeKeeper.Tests.csproj", "{C4E47ED7-D7AC-4391-9B93-9DD7DBA695E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{5BC8E2C3-1305-4464-979A-F04CF3E1C97E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BC8E2C3-1305-4464-979A-F04CF3E1C97E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BC8E2C3-1305-4464-979A-F04CF3E1C97E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E47ED7-D7AC-4391-9B93-9DD7DBA695E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E47ED7-D7AC-4391-9B93-9DD7DBA695E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E47ED7-D7AC-4391-9B93-9DD7DBA695E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E47ED7-D7AC-4391-9B93-9DD7DBA695E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

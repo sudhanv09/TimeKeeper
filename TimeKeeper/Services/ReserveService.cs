@@ -30,7 +30,7 @@ public class ReserveService : IReserveService
         return _ctx.Reservation.Any(p => p.PhoneNumber.Equals(phoneNumber));
     }
 
-    public async Task NewReservation(ReserveDTO dto)
+    public async Task<Guid> NewReservation(ReserveDTO dto)
     {
         var newGuest = new Reserve()
         {
@@ -41,6 +41,8 @@ public class ReserveService : IReserveService
         };
         _ctx.Reservation.Add(newGuest);
         await _ctx.SaveChangesAsync();
+
+        return newGuest.Id;
     }
 
     public async Task UpdateReservation(ReserveDTO dto)

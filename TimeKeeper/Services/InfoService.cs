@@ -13,29 +13,26 @@ public class InfoService : IInfoService
         _ctx = ctx;
     }
 
-    public async Task CheckIn(CheckInDTO inDto)
+    public async Task<bool> CheckIn(CheckInDTO inDto)
     {
         var working = _ctx.Timings.FirstOrDefault(x => x.EmployeeId == inDto.Id);
 
         // working is null if user not in Timings but in user table
-        if (working == null || !working.IsWorking)
+        if (working is { IsWorking: true }) throw new InvalidOperationException("Employee already checked in");
+        
+        var item = new Timing
         {
-            var item = new Timing()
-            {
-                EmployeeId = inDto.Id,
-                CheckIn = inDto.CheckInTime,
-                IsWorking = true
-            };
-            _ctx.Timings.Add(item);
-            await _ctx.SaveChangesAsync();
-        }
-        else
-        {
-            throw new InvalidOperationException("Employee already checked in");
-        }
+            EmployeeId = inDto.Id,
+            CheckIn = inDto.CheckInTime,
+            IsWorking = true
+        };
+        _ctx.Timings.Add(item);
+        await _ctx.SaveChangesAsync();
+
+        return true;
     }
 
-    public async Task CheckOut(CheckOutDTO outDto)
+    public async Task<bool> CheckOut(CheckOutDTO outDto)
     {
         var mostRecentTiming = _ctx.Timings
             .Where(t => t.EmployeeId == outDto.Id && t.IsWorking)
@@ -54,6 +51,8 @@ public class InfoService : IInfoService
         mostRecentTiming.TotalHoursWorked = TotalHours(outDto.Id, outDto.CheckOutTime);
         mostRecentTiming.TotalSalary = TotalEarnings(outDto.Id, outDto.CheckOutTime);
         await _ctx.SaveChangesAsync();
+
+        return true;
     }
 
     /* Calculate time difference between check-in and out time

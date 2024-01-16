@@ -3,3 +3,5 @@ client/node_modules
 TimeKeeper/bin
 TimeKeeper/obj
 client/.vscode
+TimeKeeper.Tests/bin
+TimeKeeper.Tests/obj

@@ -7,8 +7,8 @@ namespace TimeKeeper.Services;
 public interface IInfoService
 {
     // Actions
-    Task CheckIn(CheckInDTO inDto);
-    Task CheckOut(CheckOutDTO outDto);
+    Task<bool> CheckIn(CheckInDTO inDto);
+    Task<bool> CheckOut(CheckOutDTO outDto);
     
     // Calculations
     TimeSpan CalculateHours(string id, DateTime time);
